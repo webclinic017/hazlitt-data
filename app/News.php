@@ -12,5 +12,6 @@ class News extends Model
         'source',
         'headline',
         'date-released',
+        'url'
     ];
 }
