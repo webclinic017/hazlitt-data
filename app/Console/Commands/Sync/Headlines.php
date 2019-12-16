@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Console\Commands\Sync;
-use SimpleXMLElement;
+
 use App\News;
+use App\Commodity;
 use Illuminate\Support\Carbon;
-use GuzzleHttp\Client;
-use GuzzleHttp\TransferStats;
+use Goutte\Client;
 
 use Illuminate\Console\Command;
 
@@ -42,45 +42,32 @@ class Headlines extends Command
      */
     public function handle()
     {
-        $client = new \GuzzleHttp\Client();
+        $commodities = Commodity::all();
 
-        try {
-            $response = $client->request('GET', 'https://newsapi.org/v2/everything', [
-                'query' => [
-                    'q'   => "coffee+prices",
-                    'from' => Carbon::now('America/Denver')->format('Y/m/d'),
-                    'sources' => ['bloomberg', 'australian-financial-review', 'business-insider'],
-                    'sortBy' => 'popularity',
-                    'apiKey' => config('services.news.key'),                                   
-                ],
-            ]);
+        foreach ($commodities as $commodity) {
+            $client = new Client();
 
-            $json = $response->getBody()->getContents();
-            // dd($json);
-            
-            if ((int) $response->getStatusCode() == 200) {
-                $headlines = json_decode($json, true);                
+            try {
+                $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $commodity->queries['prices']);                
+                $crawler->filter('h3 > a')->each(function ($node) {
+                    $this->info($node->text() . "\n");
+                    $news = News::create([
+                        'commodity_id' => $commodity->id,
+                        'headline' => $node->text(),
+                        ''                        
+                    ]);
+                    $news->save();                    
+                });
+                
+                // $crawler->filter('a.wEwyrc')->each(function ($node) {
+                //     $this->info($node->text()."\n");
+                // });
 
-                foreach($headlines as $i => $v) {
-                    // dd($i);
-                    $this->info($i[1]);
 
-                    // $news = News::create([
-                    //     'headline' => $article['title'],
-                    //     'source' => $article['source'],
-                    //     'url' => $article['url'],
-                    //     'release_date' => $article['publishedAt'],
-                    // ]);
-                    // $news->save();
-                    // $this->info($article['title'] . ' - saved');
-                }                
+            } catch (\Exception $e) {
+                $this->error($e);
+                report($e);
             }
-
-        } catch (\Exception $e) {
-            $this->error($e);
-            report($e);
         }
-
-        
     }
 }

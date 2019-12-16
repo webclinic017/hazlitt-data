@@ -14,4 +14,9 @@ class News extends Model
         'date-released',
         'url'
     ];
+
+    public function commodities()
+    {
+        return $this->belongsTo('App\Commodity');
+    }
 }
