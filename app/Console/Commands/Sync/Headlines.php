@@ -6,6 +6,7 @@ use App\News;
 use App\Commodity;
 use Illuminate\Support\Carbon;
 use Goutte\Client;
+use Symfony\Component\DomCrawler\Crawler;
 
 use Illuminate\Console\Command;
 
@@ -47,22 +48,17 @@ class Headlines extends Command
         foreach ($commodities as $commodity) {
             $client = new Client();
 
-            try {
+            try {                                
                 $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $commodity->queries['prices']);                
-                $crawler->filter('h3 > a')->each(function ($node) {
-                    $this->info($node->text() . "\n");
+                foreach ($crawler->filter('h3 > a') as $title) {
+                    // $source = new Crawler();                 
                     $news = News::create([
                         'commodity_id' => $commodity->id,
-                        'headline' => $node->text(),
-                        ''                        
+                        'headline' => $title->text(),
+                        // 'source' => $source->filter('a.wEwyrc')
                     ]);
-                    $news->save();                    
-                });
-                
-                // $crawler->filter('a.wEwyrc')->each(function ($node) {
-                //     $this->info($node->text()."\n");
-                // });
-
+                    $news->save();
+                }
 
             } catch (\Exception $e) {
                 $this->error($e);
