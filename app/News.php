@@ -11,8 +11,9 @@ class News extends Model
     protected $fillable = [
         'source',
         'headline',
-        'date-released',
-        'url'
+        'release_date',
+        'url',
+        'commodity_id'
     ];
 
     public function commodities()

@@ -48,17 +48,28 @@ class Headlines extends Command
         foreach ($commodities as $commodity) {
             $client = new Client();
 
-            try {                                
-                $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $commodity->queries['prices']);                
-                foreach ($crawler->filter('h3 > a') as $title) {
-                    // $source = new Crawler();                 
-                    $news = News::create([
-                        'commodity_id' => $commodity->id,
-                        'headline' => $title->text(),
-                        // 'source' => $source->filter('a.wEwyrc')
+            try {
+                $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $commodity->queries['prices']);
+                $commodity_id = $commodity->id;
+                $crawler->filter('article')->each(function ($node) use ($commodity_id) {
+
+                    $jslog = $node->filter('article a')->attr('jslog');                    
+                    $jslog_split = explode(";", $jslog);
+                    $url_stripped = explode(":", $jslog_split[1], 2);
+                    $article_url = $url_stripped[1];
+
+                    $news = News::updateOrCreate([
+                        'url' => $article_url
+                    ], [
+                        'commodity_id' => $commodity_id,
+                        'headline' => $node->filter('h3 > a')->text(),
+                        'source' => $node->filter('a.wEwyrc')->text(),
+                        'release_date' => $node->filter('time')->attr('datetime')
                     ]);
+
                     $news->save();
-                }
+                    $this->info('Saving ' . $news->source . ' article to database');
+                });
 
             } catch (\Exception $e) {
                 $this->error($e);

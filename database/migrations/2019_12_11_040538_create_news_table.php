@@ -20,7 +20,7 @@ class CreateNewsTable extends Migration
                 ->nullable();
             $table->string('source')
                 ->nullable();
-            $table->string('url')
+            $table->text('url')
                 ->nullable();
             $table->string('headline');
             $table->string('release_date')
