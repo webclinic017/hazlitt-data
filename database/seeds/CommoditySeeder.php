@@ -20,6 +20,36 @@ class CommoditySeeder extends Seeder
 				'demand' => 'coffee+demand'
 			],
 		]);		
+        $commodity->save();
+        
+        $commodity = Commodity::create([			
+			'name' => 'gold',        
+            'queries' => [
+				'prices' => 'gold+prices',
+				'supply' => 'gold+supply',
+				'demand' => 'gold+demand'
+			],
+		]);		
+        $commodity->save();
+        
+        $commodity = Commodity::create([			
+			'name' => 'silver',        
+            'queries' => [
+				'prices' => 'silver+prices',
+				'supply' => 'silver+supply',
+				'demand' => 'silver+demand'
+			],
+		]);		
+        $commodity->save();
+        
+        $commodity = Commodity::create([			
+			'name' => 'copper',        
+            'queries' => [
+				'prices' => 'copper+prices',
+				'supply' => 'copper+supply',
+				'demand' => 'copper+demand'
+			],
+		]);		
 		$commodity->save();
     }
 }
