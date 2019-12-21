@@ -30,8 +30,4 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'news' => [
-        'key' => env('GOOGLE_NEWS_API_KEY')
-    ]
-
 ];

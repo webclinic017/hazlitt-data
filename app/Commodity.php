@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Commodity extends Model
 {
     protected $fillable = [
-        'news_id',
+        'article_id',
         'name',
         'queries',
         'price'
@@ -17,8 +17,13 @@ class Commodity extends Model
         'queries' => 'json',     
     ];
 
-    public function news()
+    public function articles()
     {
-        return $this->hasOne('App\News');
+        return $this->hasOne('App\Article');
+    }
+
+    public function registry()
+    {
+        return $this->morphOne('App\Registry', 'entry');
     }
 }

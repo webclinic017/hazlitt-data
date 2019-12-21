@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 
-class News extends Model
+class Article extends Model
 {
     protected $fillable = [
         'source',

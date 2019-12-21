@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Sync;
 
-use App\News;
+use App\Article;
 use App\Commodity;
 use Illuminate\Support\Carbon;
 use Goutte\Client;
@@ -23,7 +23,7 @@ class Headlines extends Command
      *
      * @var string
      */
-    protected $description = 'Get todays headlines from the Google News API';
+    protected $description = 'Scrape trending headlines from Google News';
 
     /**
      * Create a new command instance.
@@ -57,6 +57,15 @@ class Headlines extends Command
                         $this->warn('No articles for ' . $commodity_name);
                         return;
                     }
+                    if (
+                        $node->filter('article > h3 > a')->count() == 0 ||
+                        $node->filter('a.wEwyrc')->count() == 0 ||
+                        $node->filter('time')->count() == 0 ||
+                        $node->filter('article a')->count() == 0
+                    ) {
+                        return;
+                    }
+
                     # Manually constructing article link from jslog attribute.
                     $jslog = $node->filter('article a')->attr('jslog');                    
                     $jslog_split = explode(";", $jslog);
@@ -68,17 +77,17 @@ class Headlines extends Command
                     $date_split = explode('Z', $timestamp);
                     $release_date = $date_split[0];
 
-                    $news = News::updateOrCreate([
+                    $article = Article::updateOrCreate([
                         'url' => $article_url
                     ], [
-                        'commodity_id' => $commodity_id,
-                        'headline' => $node->filter('article > h3 > a')->text(),
+                        'commodity_id' => $commodity_id,                        
+                        'headline' => $node->filter('h3 > a')->text(),
                         'source' => $node->filter('a.wEwyrc')->text(),
                         'release_date' => $release_date
                     ]);
 
-                    $news->save();
-                    $this->info($commodity_name . ' - ' . $news->source . 'saving article to database');
+                    $article->save();
+                    $this->info($commodity_name . ' - ' . $article->source . 'saving article to database');
                 });
 
             } catch (\Exception $e) {
