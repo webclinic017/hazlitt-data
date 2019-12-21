@@ -122,12 +122,12 @@ class CommodityTableSeeder extends Seeder
 			$entry->url              = $commodity->slug;
 			$entry->destination      = 'Main\CommodityController@consume';
 			$entry->layout           = 'main.layouts.app';
-			$entry->view             = 'main.scripts.products.index';
+			$entry->view             = 'commodities.index';
 			$entry->redirect         = false;
 			$entry->code             = 200;
-			$entry->meta_title       = 'Volcano Helicopter Tours in Big Island - Blue Hawaiian Helicopters';
-			$entry->meta_keywords    = 'Big Island Helicopter Tours, Sightseeing Helicopter Tours on Big Island';
-			$entry->meta_description = 'Blue Hawaiian&rsquo;s amazing volcano helicopter tours in Hawaii allow you to get an up-close glimpse of some of the world&rsquo;s most beautiful active volcanoes from the sky!';
+			$entry->meta_title       = $commodity->name . ' News and Prices';
+			$entry->meta_keywords    = 'Hazlitt Data, ' . $commodity->name . ', news and data';
+			$entry->meta_description = 'Hazlitt Data - ' . $commodity->name . ' prices, news and data';
 			$entry->meta_robots      = 'INDEX, FOLLOW';
 
 			$entry->save();

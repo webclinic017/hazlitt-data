@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRegistriesTable extends Migration
+class CreateRegistryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateRegistriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('registries', function (Blueprint $table) {
+        Schema::create('registry', function (Blueprint $table) {
             $table->increments('id');
 			$table->bigInteger('entry_id')
 				->index()
@@ -23,14 +23,16 @@ class CreateRegistriesTable extends Migration
 			$table->string('url')
 				->index();
 			$table->string('destination')
-				->nullable();
+                ->nullable();
+            $table->string('request')
+                ->nullable();
 			$table->string('layout')
 				->nullable();
 			$table->boolean('redirect')
 				->default( 0 );
 			$table->integer('code')
 				->default( 200 );
-			
+            $table->string('view');
 			$table->string('meta_title');
 			$table->string('meta_keywords')
 				->nullable();
@@ -51,6 +53,6 @@ class CreateRegistriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('registries');
+        Schema::dropIfExists('registry');
     }
 }
