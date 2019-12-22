@@ -33,7 +33,9 @@ class CreateRegistryTable extends Migration
 			$table->integer('code')
 				->default( 200 );
             $table->string('view');
-			$table->string('meta_title');
+            $table->string('meta_title');
+            $table->string('meta_image')
+                ->nullable();
 			$table->string('meta_keywords')
 				->nullable();
 			$table->string('meta_description')

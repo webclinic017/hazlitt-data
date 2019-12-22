@@ -10,11 +10,13 @@ class Commodity extends Model
         'article_id',
         'name',
         'queries',
+        'snippets',
         'price'
     ];
 
     public $casts = [
-        'queries' => 'json',     
+        'queries' => 'json',
+        'snippets' => 'json',     
     ];
 
     public function articles()

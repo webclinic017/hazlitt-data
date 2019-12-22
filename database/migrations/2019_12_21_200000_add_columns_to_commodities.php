@@ -20,6 +20,9 @@ class AddColumnsToCommodities extends Migration
             $table->tinyInteger('status')
                 ->after('price')
                 ->default(0);
+            $table->json('snippets')
+                ->after('slug')
+                ->nullable();
         });
     }
 
