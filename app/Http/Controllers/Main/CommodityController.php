@@ -46,9 +46,9 @@ class CommodityController extends Controller
         // ->addImage(array_get($commodity, 'web_image_url', cdn($commodity->getFirstMediaUrl('image-square'))));
 
 
-        Javascript::put([
-            'commodity'  => $commodity,
-        ]);
+        // Javascript::put([
+        //     'commodity'  => $commodity,
+        // ]);
 
         return view($entry->view)
             ->with('entry', $entry)
