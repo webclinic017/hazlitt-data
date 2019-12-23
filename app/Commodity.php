@@ -21,7 +21,7 @@ class Commodity extends Model
 
     public function articles()
     {
-        return $this->hasOne('App\Article');
+        return $this->hasMany('App\Article');
     }
 
     public function registry()

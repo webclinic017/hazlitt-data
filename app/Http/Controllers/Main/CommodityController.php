@@ -6,9 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Commodity;
 use App\Registry;
+use App\Article;
 use Artesaos\SEOTools\Traits\SEOTools as SEOToolsTrait;
-use Laracasts\Utilities\JavaScript\JavaScriptFacade as Javascript;
-use Illuminate\Support\Arr;
+// use Laracasts\Utilities\JavaScript\JavaScriptFacade as Javascript;
+// use Illuminate\Support\Arr;
 
 class CommodityController extends Controller
 {
@@ -24,6 +25,7 @@ class CommodityController extends Controller
             ->whereId($commodity->id)
             ->select('commodities.*')
             ->with('registry')
+            ->with('articles')
             ->first();
 
 
@@ -43,16 +45,16 @@ class CommodityController extends Controller
         $this->seo()
             ->opengraph()
             ->setUrl(url($entry->url));
-        // ->addImage(array_get($commodity, 'web_image_url', cdn($commodity->getFirstMediaUrl('image-square'))));
-
-
-        // Javascript::put([
-        //     'commodity'  => $commodity,
-        // ]);
 
         return view($entry->view)
             ->with('entry', $entry)
-            ->with('commodity', $commodity);
-        // ->get();
+            ->with('commodity', $commodity)
+            ->with('article', $commodity->articles);
+            // ->with(
+            //     'articles',
+            //     Article::query()
+            //         ->orWhere('commodity_id', '=', $commodity->id)
+            //         ->get()
+            // );
     }
 }

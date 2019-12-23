@@ -17,8 +17,7 @@ class CreateArticlesTable extends Migration
             $table->bigIncrements('id');
             $table->integer('commodity_id')
                 ->index()
-                ->nullable();
-            $table->integer('popularity'); 
+                ->nullable();            
             $table->string('source');
             $table->text('url');     
             $table->text('headline');
