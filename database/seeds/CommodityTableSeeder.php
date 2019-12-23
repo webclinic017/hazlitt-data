@@ -14,6 +14,7 @@ class CommodityTableSeeder extends Seeder
 	public function run()
 	{
 		Commodity::truncate();
+		Registry::truncate();
 
 		$commodity_types = [
 			'Aluminum',
@@ -109,7 +110,7 @@ class CommodityTableSeeder extends Seeder
 		foreach ($commodity_types as $type) {			
 			$commodity = Commodity::create([
 				'name' => $type,
-                'slug' => strtolower($type),
+                'slug' => strtolower(str_replace(' ', '-', $type)),
                 'status' => 1,
 				'queries' => [
 					'prices' => strtolower(str_replace(' ', '+', $type)) . '+prices',
@@ -120,7 +121,7 @@ class CommodityTableSeeder extends Seeder
 
 			$entry = new Registry();
 
-			$entry->url              = $commodity->slug;
+			$entry->url              = 'commodities/' . $commodity->slug;
 			$entry->destination      = 'Main\CommodityController@router';
 			$entry->layout           = 'main.layouts.app';
 			$entry->view             = 'commodities.index';
