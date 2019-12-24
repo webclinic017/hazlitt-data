@@ -18,6 +18,6 @@ class Article extends Model
 
     public function commodities()
     {
-        return $this->belongsTo('App\Commodity');
+        return $this->belongsTo('App\Commodity', 'commodity_id');
     }
 }

@@ -44,17 +44,11 @@ class CommodityController extends Controller
             ->addMeta('robots', $entry->meta_robots);
         $this->seo()
             ->opengraph()
-            ->setUrl(url($entry->url));
+            ->setUrl(url($entry->url));                            
 
         return view($entry->view)
             ->with('entry', $entry)
             ->with('commodity', $commodity)
-            ->with('article', $commodity->articles);
-            // ->with(
-            //     'articles',
-            //     Article::query()
-            //         ->orWhere('commodity_id', '=', $commodity->id)
-            //         ->get()
-            // );
+            ->with('commodity.articles', $commodity->articles);
     }
 }
