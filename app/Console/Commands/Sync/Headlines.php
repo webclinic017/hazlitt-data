@@ -46,54 +46,64 @@ class Headlines extends Command
 
         foreach ($commodities as $commodity) {
             $client = new Client();
+            $queries = collect([
+                'prices' => $commodity->queries['prices'],
+                'supply' => $commodity->queries['supply'],
+                'demand' => $commodity->queries['demand']
+            ]);
 
-            try {
-                $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $commodity->queries['prices']);
-                $commodity_id = $commodity->id;
-                $commodity_name = $commodity->name;
-                $crawler->filter('article')->each(function ($node) use ($commodity_id, $commodity_name) {
+            $queries->each(function ($value, $query) use ($commodity, $client) {
+            
+                try {
+                    $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $value);
+                    $this->comment("\n" . 'https://news.google.com/search?q=' . $value);
 
-                    if (!isset($node)) {
-                        $this->warn('No articles for ' . $commodity_name);
-                        return;
-                    }
-                    if (
-                        $node->filter('article > h3 > a')->count() == 0 ||
-                        $node->filter('a.wEwyrc')->count() == 0 ||
-                        $node->filter('time')->count() == 0 ||
-                        $node->filter('article a')->count() == 0
-                    ) {
-                        return;
-                    }
+                    $commodity_id = $commodity->id;
+                    $commodity_name = $commodity->name;
 
-                    # Manually constructing article link from jslog attribute.
-                    $jslog = $node->filter('article a')->attr('jslog');                    
-                    $jslog_split = explode(";", $jslog);
-                    $url_stripped = explode(":", $jslog_split[1], 2);
-                    $article_url = $url_stripped[1];
+                    $crawler->filter('article')->each(function ($node) use ($commodity_id, $commodity_name) {
 
-                    # Removing Google's random Z from timestamp
-                    $timestamp = $node->filter('time')->attr('datetime');
-                    $date_split = explode('Z', $timestamp);
-                    $release_date = $date_split[0];
+                        if (!isset($node)) {
+                            $this->warn('No articles for ' . $commodity_name);
+                            return;
+                        }
+                        if (
+                            $node->filter('article > h3 > a')->count() == 0 ||
+                            $node->filter('a.wEwyrc')->count() == 0 ||
+                            $node->filter('time')->count() == 0 ||
+                            $node->filter('article a')->count() == 0
+                        ) {
+                            return;
+                        }
 
-                    $article = Article::updateOrCreate([
-                        'url' => $article_url
-                    ], [
-                        'commodity_id' => $commodity_id,                        
-                        'headline' => $node->filter('h3 > a')->text(),
-                        'source' => $node->filter('a.wEwyrc')->text(),
-                        'release_date' => $release_date
-                    ]);
+                        # Manually constructing article link from jslog attribute.
+                        $jslog = $node->filter('article a')->attr('jslog');
+                        $jslog_split = explode(";", $jslog);
+                        $url_stripped = explode(":", $jslog_split[1], 2);
+                        $article_url = $url_stripped[1];
 
-                    $article->save();
-                    $this->info($commodity_name . ' - ' . $article->source . 'saving article to database');
-                });
+                        # Removing Google's random Z from timestamp
+                        $timestamp = $node->filter('time')->attr('datetime');
+                        $date_split = explode('Z', $timestamp);
+                        $release_date = $date_split[0];
 
-            } catch (\Exception $e) {
-                $this->error($e);
-                report($e);
-            }
+                        $article = Article::updateOrCreate([
+                            'url' => $article_url
+                        ], [
+                            'commodity_id' => $commodity_id,
+                            'headline' => $node->filter('h3 > a')->text(),
+                            'source' => $node->filter('a.wEwyrc')->text(),
+                            'release_date' => $release_date
+                        ]);
+
+                        $article->save();
+                        $this->info($commodity_name . ' - ' . $article->source . ' saving article to database');
+                    });
+                } catch (\Exception $e) {
+                    $this->error($e);
+                    report($e);
+                }
+            });
         }
     }
 }

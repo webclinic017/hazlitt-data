@@ -48,7 +48,6 @@ class CommodityController extends Controller
 
         return view($entry->view)
             ->with('entry', $entry)
-            ->with('commodity', $commodity)
-            ->with('commodity.articles', $commodity->articles);
+            ->with('commodity', $commodity);            
     }
 }
