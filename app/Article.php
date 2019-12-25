@@ -12,6 +12,7 @@ class Article extends Model
         'source',
         'headline',
         'release_date',
+        'category',
         'url',
         'commodity_id'
     ];
@@ -19,5 +20,10 @@ class Article extends Model
     public function commodities()
     {
         return $this->belongsTo('App\Commodity', 'commodity_id');
+    }
+
+    public function countries()
+    {
+        return $this->belongsTo('App\Country', 'country_id');
     }
 }

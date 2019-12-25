@@ -17,10 +17,15 @@ class CreateArticlesTable extends Migration
             $table->bigIncrements('id');
             $table->integer('commodity_id')
                 ->index()
-                ->nullable();            
+                ->nullable();
+            $table->integer('country_id')
+                ->index()
+                ->nullable();
             $table->string('source');
-            $table->text('url');     
+            $table->text('url');
             $table->text('headline');
+            $table->string('type');
+            $table->string('category');
             $table->string('release_date');
             $table->timestamps();
         });

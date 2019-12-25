@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Sync;
+namespace App\Console\Commands\Headlines;
 
 use App\Article;
 use App\Commodity;
@@ -16,14 +16,14 @@ class Headlines extends Command
      *
      * @var string
      */
-    protected $signature = 'sync:headlines';
+    protected $signature = 'commodity:headlines';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Scrape trending headlines from Google News';
+    protected $description = 'Scrape trending commodity headlines from Google News';
 
     /**
      * Create a new command instance.
@@ -42,6 +42,7 @@ class Headlines extends Command
      */
     public function handle()
     {
+        $start = microtime(true);
         $commodities = Commodity::all();
 
         foreach ($commodities as $commodity) {
@@ -52,16 +53,17 @@ class Headlines extends Command
                 'demand' => $commodity->queries['demand']
             ]);
 
-            $queries->each(function ($value, $query) use ($commodity, $client) {
+            $queries->each(function ($value, $query) use ($commodity, $client) {                
             
                 try {
-                    $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $value);
                     $this->comment("\n" . 'https://news.google.com/search?q=' . $value);
+                    $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $value);                    
 
                     $commodity_id = $commodity->id;
                     $commodity_name = $commodity->name;
+                    $category = $query;
 
-                    $crawler->filter('article')->each(function ($node) use ($commodity_id, $commodity_name) {
+                    $crawler->filter('article')->each(function ($node) use ($commodity_id, $commodity_name, $category) {
 
                         if (!isset($node)) {
                             $this->warn('No articles for ' . $commodity_name);
@@ -93,6 +95,7 @@ class Headlines extends Command
                             'commodity_id' => $commodity_id,
                             'headline' => $node->filter('h3 > a')->text(),
                             'source' => $node->filter('a.wEwyrc')->text(),
+                            'category' => $category,
                             'release_date' => $release_date
                         ]);
 
@@ -105,5 +108,8 @@ class Headlines extends Command
                 }
             });
         }
+        $end = microtime(true);
+        $time = number_format(($end - $start), 2);
+        $this->info("\n" . 'Done: ' . $time . ' seconds');
     }
 }
