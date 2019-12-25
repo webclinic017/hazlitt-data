@@ -9,14 +9,14 @@ use Goutte\Client;
 
 use Illuminate\Console\Command;
 
-class Headlines extends Command
+class CommodityHeadlines extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'commodity:headlines';
+    protected $signature = 'headlines:commodities';
 
     /**
      * The console command description.

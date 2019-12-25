@@ -8,14 +8,14 @@ use App\Commodity;
 use Illuminate\Support\Carbon;
 use Goutte\Client;
 
-class Countries extends Command
+class CountryIndicators extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'country:indicators';
+    protected $signature = 'indicators:countries';
 
     /**
      * The console command description.
@@ -49,28 +49,54 @@ class Countries extends Command
 
             $pages = collect([
                 'inflation' => 'inflation-cpi',
-                'corporate-tax' => 'corporate-tax-rate',
-                'interest-rate' => 'interest-rate',
-                'unemployment' => 'unemployment-rate',
-                'income-tax' => 'personal-income-tax-rate',
+                'corporate_tax' => 'corporate-tax-rate',
+                'interest_rate' => 'interest-rate',
+                'unemployment_rate' => 'unemployment-rate',
+                'labor_force' => 'labor-force-participation-rate',
+                'income_tax' => 'personal-income-tax-rate',
                 'gdp' => 'gdp-per-capita',
-                'gov-debt' => 'government-debt-to-gdp',
-                'banks-balance' => 'banks-balance-sheet',
-                'central-bank-balance' => 'central-bank-balance-sheet',
-                'gov-budget' => 'government-budget-value'
-            ])
+                'gov_debt_to_gdp' => 'government-debt-to-gdp',
+                'central_bank_balance_sheet' => 'central-bank-balance-sheet',
+                'budget' => 'government-budget-value'
+            ]);
 
-            try {
-                $this->comment("\n" . 'https://tradingeconomics.com' . $country->slug.  '/inflation-cpi');
-                $inflation_html = $client->request('GET', 'https://tradingeconomics.com' . $country->slug.  '/inflation-cpi');                    
+            $pages->each(function ($slug, $indicator) use ($country, $client) {
 
-                $country_id = $country->id;
-                $commodity_name = $country->name;
-                $category = $query;
+                try {
 
-            }
+                    $this->comment("\n" . 'https://tradingeconomics.com/' . $country->slug .  '/' . $slug);
+                    $crawler = $client->request('GET', 'https://tradingeconomics.com/' . $country->slug .  '/' . $slug);
 
+                    $crawler->filter('body')->each(function ($node) use ($country, $indicator) {
+                        if (!isset($node)) {
+                            $this->alert($country->name . ' ' . $indicator . ' indicator missing.');
+                            return;
+                        }
+
+                        if (
+                            $node->filter('#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)')->count() == 0
+                        ) {
+                            $this->alert($country->name . ' ' . $indicator . ' indicator missing.');
+                            return;
+                        }
+
+                        $country = Country::query()
+                            ->whereName($country->name);
+
+                        $country->update([
+                            $indicator => $node->filter('#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)')->text()
+                        ]);
+                    });
+                    $this->info('Saving ' . $country->name . ' ' . $indicator);
+                } catch (\Exception $e) {
+                    $this->error($e);
+                    report($e);
+                }
+            });
         }
+        $end = microtime(true);
+        $time = number_format(($end - $start), 2);
+        $this->info("\n" . 'Done: ' . $time . ' seconds');
     }
 }
 
@@ -103,3 +129,18 @@ class Countries extends Command
 // puts "got #{country.name} central bank data"
 // sleep(num_sec)
 // budget_page = Nokogiri::HTML(HTTParty.get("https://tradingeconomics.com/#{country.name}/government-budget-value"))
+
+// Country.where(name: "#{country.name}").update(
+//     inflation: inflation_page.css("#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)").text.strip,
+//     corporate_tax: corporate_tax_page.css("#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)").text.strip,
+//     interest_rate: interest_rate_page.css("#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)").text.strip,
+//     unemployment: unemployment_page.css("#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)").text.strip,
+//     income_tax: income_tax_page.css("#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)").text.strip,
+//     gdp: gdp_page.css("#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)").text.strip,
+//     gov_debt_to_gdp: gov_debt_to_gdp_page.css("#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)").text.strip,
+//     bank_balance_sheet: bank_balance_sheet_page.css("#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)").text.strip,
+//     central_bank: central_bank_page.css("#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)").text.strip,
+//     budget: budget_page.css("#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)").text.strip
+//     )
+//     puts "Pages Scraped, Indicators Saved"
+// end
