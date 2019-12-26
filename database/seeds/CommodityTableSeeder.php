@@ -112,11 +112,6 @@ class CommodityTableSeeder extends Seeder
 				'name' => $type,
                 'slug' => strtolower(str_replace(' ', '-', $type)),
                 'status' => 1,
-				'queries' => [
-					'prices' => strtolower(str_replace(' ', '+', $type)) . '+prices',
-					'supply' => strtolower(str_replace(' ', '+', $type)) . '+supply',
-					'demand' => strtolower(str_replace(' ', '+', $type)) . '+demand',
-				],
 			]);						
 
 			$entry = new Registry();

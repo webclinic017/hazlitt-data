@@ -48,25 +48,23 @@ class CommodityHeadlines extends Command
         foreach ($commodities as $commodity) {
             $client = new Client();
             $queries = collect([
-                'prices' => $commodity->queries['prices'],
-                'supply' => $commodity->queries['supply'],
-                'demand' => $commodity->queries['demand']
+                'prices' => strtolower(str_replace(' ', '+', $commodity->name)) . '+prices',
+                'supply' => strtolower(str_replace(' ', '+', $commodity->name)) . '+supply',
+                'demand' => strtolower(str_replace(' ', '+', $commodity->name)) . '+demand'
             ]);
 
-            $queries->each(function ($value, $query) use ($commodity, $client) {                
-            
+            $queries->each(function ($value, $query) use ($commodity, $client) {
+
                 try {
                     $this->comment("\n" . 'https://news.google.com/search?q=' . $value);
-                    $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $value);                    
+                    $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $value);
 
-                    $commodity_id = $commodity->id;
-                    $commodity_name = $commodity->name;
                     $category = $query;
 
-                    $crawler->filter('article')->each(function ($node) use ($commodity_id, $commodity_name, $category) {
+                    $crawler->filter('article')->each(function ($node) use ($commodity, $category) {
 
                         if (!isset($node)) {
-                            $this->warn('No articles for ' . $commodity_name);
+                            $this->warn('No articles for ' . $commodity->name);
                             return;
                         }
                         if (
@@ -92,15 +90,16 @@ class CommodityHeadlines extends Command
                         $article = Article::updateOrCreate([
                             'url' => $article_url
                         ], [
-                            'commodity_id' => $commodity_id,
+                            'commodity_id' => $commodity->id,
                             'headline' => $node->filter('h3 > a')->text(),
                             'source' => $node->filter('a.wEwyrc')->text(),
+                            'type' => 'Commodity',
                             'category' => $category,
                             'release_date' => $release_date
                         ]);
 
                         $article->save();
-                        $this->info($commodity_name . ' - ' . $article->source . ' saving article to database');
+                        $this->info($commodity->name . ' - ' . $article->source . ' saving article to database');
                     });
                 } catch (\Exception $e) {
                     $this->error($e);
@@ -109,7 +108,7 @@ class CommodityHeadlines extends Command
             });
         }
         $end = microtime(true);
-        $time = number_format(($end - $start), 2);
-        $this->info("\n" . 'Done: ' . $time . ' seconds');
+        $time = number_format(($end - $start) / 60);
+        $this->info("\n" . 'Done: ' . $time . ' minutes');
     }
 }

@@ -64,19 +64,19 @@ class CountryIndicators extends Command
 
                 try {
 
-                    $this->comment("\n" . 'https://tradingeconomics.com/' . $country->slug .  '/' . $slug);
+                    $this->comment('https://tradingeconomics.com/' . $country->slug .  '/' . $slug);
                     $crawler = $client->request('GET', 'https://tradingeconomics.com/' . $country->slug .  '/' . $slug);
 
                     $crawler->filter('body')->each(function ($node) use ($country, $indicator) {
                         if (!isset($node)) {
-                            $this->alert($country->name . ' ' . $indicator . ' indicator missing.');
+                            $this->error($country->name . ' ' . $indicator . ' indicator missing.');
                             return;
                         }
 
                         if (
                             $node->filter('#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)')->count() == 0
                         ) {
-                            $this->alert($country->name . ' ' . $indicator . ' indicator missing.');
+                            $this->error($country->name . ' ' . $indicator . ' indicator missing.');
                             return;
                         }
 
@@ -86,8 +86,9 @@ class CountryIndicators extends Command
                         $country->update([
                             $indicator => $node->filter('#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)')->text()
                         ]);
-                    });
-                    $this->info('Saving ' . $country->name . ' ' . $indicator);
+                    });                    
+                    $this->info('Saved ' . $country->name . ' ' . $indicator);                    
+
                 } catch (\Exception $e) {
                     $this->error($e);
                     report($e);
@@ -95,8 +96,8 @@ class CountryIndicators extends Command
             });
         }
         $end = microtime(true);
-        $time = number_format(($end - $start), 2);
-        $this->info("\n" . 'Done: ' . $time . ' seconds');
+        $time = number_format(($end - $start)/60);
+        $this->info("\n" . 'Done: ' . $time . ' minutes');
     }
 }
 

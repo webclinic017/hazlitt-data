@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Commodity extends Model
 {
     protected $fillable = [
-        'article_id',
+        'id',
         'name',
-        'queries',
-        'snippets',
-        'price'
+        'slug',
+        'snippets',                              
+        'price',           
+        'status',                    
     ];
 
-    public $casts = [
-        'queries' => 'json',
+    public $casts = [        
         'snippets' => 'json',     
     ];
 

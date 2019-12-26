@@ -9,12 +9,14 @@ use Illuminate\Support\Facades\DB;
 class Article extends Model
 {
     protected $fillable = [
-        'source',
-        'headline',
-        'release_date',
-        'category',
-        'url',
-        'commodity_id'
+    'commodity_id',
+    'country_id',
+    'source',
+    'url',
+    'headline',
+    'type',
+    'category',
+    'release_date',
     ];
 
     public function commodities()
