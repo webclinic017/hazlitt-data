@@ -17,11 +17,11 @@ class Commodity extends Model
 
     public $casts = [        
         'snippets' => 'json',     
-    ];
+    ];   
 
     public function articles()
     {
-        return $this->hasMany('App\Article', 'commodity_id');
+        return $this->morphMany('App\Article', 'entry');
     }
 
     public function registry()

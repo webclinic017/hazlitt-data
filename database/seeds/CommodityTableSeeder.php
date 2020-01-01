@@ -13,8 +13,7 @@ class CommodityTableSeeder extends Seeder
 	 */
 	public function run()
 	{
-		Commodity::truncate();
-		Registry::truncate();
+		Commodity::truncate();		
 
 		$commodity_types = [
 			'Aluminum',

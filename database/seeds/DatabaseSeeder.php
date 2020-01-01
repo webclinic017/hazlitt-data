@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Registry;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +12,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        Registry::truncate();
         $this->call(CommodityTableSeeder::class);
         $this->call(CountryTableSeeder::class);      
     }

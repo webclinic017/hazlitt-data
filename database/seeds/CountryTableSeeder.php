@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Country;
+use App\Registry;
 
 class CountryTableSeeder extends Seeder
 {
@@ -219,7 +220,25 @@ class CountryTableSeeder extends Seeder
 				'name' => $country,
                 'slug' => strtolower(str_replace(' ', '-', $country)),                
                 'status' => 1,
-            ]);	
+            ]);
+
+            $entry = new Registry();
+
+			$entry->url              = 'countries/' . $country->slug;
+			$entry->destination      = 'Main\CountryController@router';
+			$entry->layout           = 'main.layouts.app';
+			$entry->view             = 'countries.index';
+			$entry->redirect         = false;
+			$entry->code             = 200;
+			$entry->meta_title       = $country->name . ' News and Prices';
+			$entry->meta_keywords    = 'Hazlitt Data, ' . $country->name . ', news and data';
+			$entry->meta_description = 'Hazlitt Data - ' . $country->name . ' prices, news and data';
+			$entry->meta_robots      = 'INDEX, FOLLOW';
+
+			$entry->save();
+
+			$country->registry()
+				->save($entry);
         }
     }
 }

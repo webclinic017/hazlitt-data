@@ -19,13 +19,8 @@ class Article extends Model
     'release_date',
     ];
 
-    public function commodities()
+    public function entry()
     {
-        return $this->belongsTo('App\Commodity', 'commodity_id');
-    }
-
-    public function countries()
-    {
-        return $this->belongsTo('App\Country', 'country_id');
+        return $this->morphTo();
     }
 }

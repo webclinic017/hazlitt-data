@@ -29,7 +29,7 @@ class Country extends Model
 
     public function articles()
     {
-        return $this->hasMany('App\Article', 'country_id');
+        return $this->morphMany('App\Article', 'entry');
     }
 
     public function registry()
