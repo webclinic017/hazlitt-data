@@ -51,15 +51,15 @@ class CountryHeadlines extends Command
                 'interest-rates' => strtolower(str_replace(' ', '+', $country->name)) . '+interest+rates',
             ]);
 
+            Article::where('entry_id', '=', $country->id)->delete();
+
             $queries->each(function ($value, $query) use ($country, $client) {
 
                 try {
                     $this->comment("\n" . 'https://news.google.com/search?q=' . $value);
                     $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $value);
 
-                    $category = $query;
-
-                    $crawler->filter('article')->each(function ($node) use ($category, $country) {
+                    $crawler->filter('article')->each(function ($node) use ($query, $country) {
 
                         if (!isset($node)) {
                             $this->warn('No articles for ' . $country->name);
@@ -79,20 +79,19 @@ class CountryHeadlines extends Command
                         $jslog_split = explode(";", $jslog);
                         $url_stripped = explode(":", $jslog_split[1], 2);
                         $article_url = $url_stripped[1];
-
                         # Removing Google's random Z from timestamp
                         $timestamp = $node->filter('time')->attr('datetime');
                         $date_split = explode('Z', $timestamp);
                         $release_date = $date_split[0];
 
-                        $article = Article::updateOrCreate([
-                            'url' => $article_url
-                        ], [
-                            'country_id' => $country->id,
+                        $article = Article::create([
+                            'entry_id' => $country->id,
+                            'entry_type' => 'App\Country',
                             'headline' => $node->filter('h3 > a')->text(),
+                            'url' => $article_url,
                             'source' => $node->filter('a.wEwyrc')->text(),
-                            'type' => 'Country',
-                            'category' => $category,
+                            'item' => $country->name,
+                            'subject' => $query,
                             'release_date' => $release_date
                         ]);
 

@@ -53,15 +53,15 @@ class CommodityHeadlines extends Command
                 'demand' => strtolower(str_replace(' ', '+', $commodity->name)) . '+demand'
             ]);
 
+            Article::where('entry_id', '=', $commodity->id)->delete();
+
             $queries->each(function ($value, $query) use ($commodity, $client) {
 
                 try {
                     $this->comment("\n" . 'https://news.google.com/search?q=' . $value);
                     $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $value);
 
-                    $category = $query;
-
-                    $crawler->filter('article')->each(function ($node) use ($commodity, $category) {
+                    $crawler->filter('article')->each(function ($node) use ($commodity, $query) {
 
                         if (!isset($node)) {
                             $this->warn('No articles for ' . $commodity->name);
@@ -87,14 +87,15 @@ class CommodityHeadlines extends Command
                         $date_split = explode('Z', $timestamp);
                         $release_date = $date_split[0];
 
-                        $article = Article::updateOrCreate([
-                            'url' => $article_url
-                        ], [
-                            'commodity_id' => $commodity->id,
+
+                        $article = Article::create([
+                            'entry_id' => $commodity->id,
+                            'entry_type' => 'App\Commodity',
                             'headline' => $node->filter('h3 > a')->text(),
+                            'url' => $article_url,
                             'source' => $node->filter('a.wEwyrc')->text(),
-                            'type' => 'Commodity',
-                            'category' => $category,
+                            'item' => $commodity->name,
+                            'subject' => $query,
                             'release_date' => $release_date
                         ]);
 
