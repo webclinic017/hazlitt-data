@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\DB;
 class Article extends Model
 {
     protected $fillable = [
-    'entry_id',
-    'entry_type',
+    'item_id',
+    'item_type',
     'source',
     'url',
     'headline',
-    'item',
     'subject',
+    'topic',
     'release_date',
     ];
 

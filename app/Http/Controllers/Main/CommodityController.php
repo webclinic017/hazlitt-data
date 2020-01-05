@@ -26,8 +26,7 @@ class CommodityController extends Controller
             ->select('commodities.*')
             ->with('registry')
             ->with('articles')
-            ->first();
-
+            ->first();            
 
         // $snippets = Arr::wrap($commodity->snippets->get(app()->getLocale()));
         //     foreach ($snippets as $key => $value) {
@@ -44,10 +43,10 @@ class CommodityController extends Controller
             ->addMeta('robots', $entry->meta_robots);
         $this->seo()
             ->opengraph()
-            ->setUrl(url($entry->url));                            
+            ->setUrl(url($entry->url));
 
         return view($entry->view)
             ->with('entry', $entry)
-            ->with('commodity', $commodity);            
+            ->with('commodity', $commodity);
     }
 }

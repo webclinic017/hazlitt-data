@@ -5,7 +5,6 @@ namespace App\Console\Commands\Commodities;
 use App\Article;
 use App\Commodity;
 use Illuminate\Support\Carbon;
-use App\Jobs\Scraper;
 use Goutte\Client;
 
 use Illuminate\Console\Command;
@@ -54,7 +53,7 @@ class Headlines extends Command
                 'demand' => strtolower(str_replace(' ', '+', $commodity->name)) . '+demand'
             ]);
 
-            Article::where('entry_id', '=', $commodity->id)->delete();
+            Article::where('item_id', '=', $commodity->id)->delete();
 
             $queries->each(function ($value, $query) use ($commodity, $client) {
 
@@ -90,13 +89,13 @@ class Headlines extends Command
 
 
                         $article = Article::create([
-                            'entry_id' => $commodity->id,
-                            'entry_type' => 'App\Commodity',
+                            'item_id' => $commodity->id,
+                            'item_type' => 'App\Commodity',
                             'headline' => $node->filter('h3 > a')->text(),
                             'url' => $article_url,
                             'source' => $node->filter('a.wEwyrc')->text(),
-                            'item' => $commodity->name,
-                            'subject' => $query,
+                            'subject' => $commodity->name,
+                            'topic' => $query,
                             'release_date' => $release_date
                         ]);
 

@@ -15,11 +15,11 @@ class CreateArticlesTable extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('entry_id')
+            $table->bigInteger('item_id')
                 ->index();     
-            $table->string('entry_type');
-            $table->string('item');
+            $table->string('item_type');
             $table->string('subject');
+            $table->string('topic');
             $table->string('source');
             $table->text('url');
             $table->text('headline');            

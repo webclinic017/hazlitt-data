@@ -51,7 +51,7 @@ class Headlines extends Command
                 'interest-rates' => strtolower(str_replace(' ', '+', $country->name)) . '+interest+rates',
             ]);
 
-            Article::where('entry_id', '=', $country->id)->delete();
+            Article::where('item_id', '=', $country->id)->delete();
 
             $queries->each(function ($value, $query) use ($country, $client) {
 
@@ -85,13 +85,13 @@ class Headlines extends Command
                         $release_date = $date_split[0];
 
                         $article = Article::create([
-                            'entry_id' => $country->id,
-                            'entry_type' => 'App\Country',
+                            'item_id' => $country->id,
+                            'item_type' => 'App\Country',
                             'headline' => $node->filter('h3 > a')->text(),
                             'url' => $article_url,
                             'source' => $node->filter('a.wEwyrc')->text(),
-                            'item' => $country->name,
-                            'subject' => $query,
+                            'subject' => $country->name,
+                            'topic' => $query,
                             'release_date' => $release_date
                         ]);
 
