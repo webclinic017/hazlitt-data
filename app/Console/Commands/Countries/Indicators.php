@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Indicators;
+namespace App\Console\Commands\Countries;
 
 use Illuminate\Console\Command;
 use App\Country;
@@ -8,14 +8,14 @@ use App\Commodity;
 use Illuminate\Support\Carbon;
 use Goutte\Client;
 
-class CountryIndicators extends Command
+class Indicators extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'indicators:countries';
+    protected $signature = 'countries:indicators';
 
     /**
      * The console command description.
