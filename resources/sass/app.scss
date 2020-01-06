@@ -1,7 +1,22 @@
 //
 
 @tailwind base;
-
 @tailwind components;
-
 @tailwind utilities;
+
+
+.bg-dark-mode {
+    background-color: #212121;
+}
+
+.bg-dark-mode-lighter {
+    background-color: #303030;
+}
+
+.bg-dark-mode-lightest {
+    background-color: #424242;
+}
+
+.alternating-row {
+    .row-item:nth-child(even) {background: #424242}
+}

@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{!! asset('css/app.css') !!}">
 </head>
 
-<body>
+<body class="bg-dark-mode">
     {{-- @include('main.partials.header') --}}
 
     @yield('content')
