@@ -51,7 +51,7 @@ class Headlines extends Command
                 'interest-rates' => strtolower(str_replace(' ', '+', $country->name)) . '+interest+rates',
             ]);
 
-            Article::where('item_id', '=', $country->id)->delete();
+            Article::where('item_id', '=', $country->id)->where('item_type', '=', 'App\Country')->delete();
 
             $queries->each(function ($value, $query) use ($country, $client) {
 

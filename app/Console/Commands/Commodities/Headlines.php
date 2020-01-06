@@ -53,7 +53,7 @@ class Headlines extends Command
                 'demand' => strtolower(str_replace(' ', '+', $commodity->name)) . '+demand'
             ]);
 
-            Article::where('item_id', '=', $commodity->id)->delete();
+            Article::where('item_id', '=', $commodity->id)->where('item_type', '=', 'App\Commodity')->delete();
 
             $queries->each(function ($value, $query) use ($commodity, $client) {
 
