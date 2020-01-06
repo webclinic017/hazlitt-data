@@ -27,7 +27,7 @@ class CommodityController extends Controller
             ->with('registry')
             ->with('articles')
             ->first();            
-
+            
         // $snippets = Arr::wrap($commodity->snippets->get(app()->getLocale()));
         //     foreach ($snippets as $key => $value) {
         //         $commodity->snippets->set(app()->getLocale() . '.' . $key, view(['template' => $value, 'secondsTemplateCacheExpires' => 0], ['entry' => $entry, 'commodity' => $commodity])->render());

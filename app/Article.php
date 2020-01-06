@@ -19,7 +19,7 @@ class Article extends Model
     'release_date',
     ];
 
-    public function entry()
+    public function item()
     {
         return $this->morphTo();
     }

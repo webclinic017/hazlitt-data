@@ -79,23 +79,28 @@ class Headlines extends Command
                         $jslog_split = explode(";", $jslog);
                         $url_stripped = explode(":", $jslog_split[1], 2);
                         $article_url = $url_stripped[1];
+                        if (Article::where('url', '=', $article_url)->count() != 0) {
+                            $this->warn('Duplicate article');
+                            return;
+                        }
+
                         # Removing Google's random Z from timestamp
                         $timestamp = $node->filter('time')->attr('datetime');
                         $date_split = explode('Z', $timestamp);
                         $release_date = $date_split[0];
 
-                        $article = Article::create([
-                            'item_id' => $country->id,
-                            'item_type' => 'App\Country',
-                            'headline' => $node->filter('h3 > a')->text(),
-                            'url' => $article_url,
-                            'source' => $node->filter('a.wEwyrc')->text(),
-                            'subject' => $country->name,
-                            'topic' => $query,
-                            'release_date' => $release_date
-                        ]);
+                        $article = new Article();
+                        $article->headline      = $node->filter('h3 > a')->text();
+                        $article->url           = $article_url;
+                        $article->source        = $node->filter('a.wEwyrc')->text();
+                        $article->subject       = $country->name;
+                        $article->topic         = $query;
+                        $article->release_date  = $release_date;
 
                         $article->save();
+                        $country->articles()
+                            ->save($article);
+
                         $this->info($country->name . ' - ' . $article->source . ' saving article to database');
                     });
                 } catch (\Exception $e) {
