@@ -15,7 +15,7 @@ class Headlines extends Command
      *
      * @var string
      */
-    protected $signature = 'countries:headlines';
+    protected $signature = 'country:headlines';
 
     /**
      * The console command description.

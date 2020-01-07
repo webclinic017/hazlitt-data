@@ -15,7 +15,7 @@ class Indicators extends Command
      *
      * @var string
      */
-    protected $signature = 'countries:indicators';
+    protected $signature = 'country:indicators';
 
     /**
      * The console command description.
