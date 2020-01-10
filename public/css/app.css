@@ -11401,6 +11401,10 @@ video {
   z-index: auto;
 }
 
+.gothic-neo {
+  font-family: Apple SD Gothic Neo;
+}
+
 .bg-dark-mode {
   background-color: #212121;
 }
