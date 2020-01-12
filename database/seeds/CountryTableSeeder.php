@@ -14,231 +14,34 @@ class CountryTableSeeder extends Seeder
     public function run()
     {
         Country::truncate();
+        $country = new Country();
+        $countries = $country->countries();
+        $countries->each(function ($code, $name) {
 
-        $countries = [
-            "Afghanistan",
-            "Albania",
-            "Algeria",
-            "Andorra",
-            "Angola",
-            "Antigua and Barbuda",
-            "Argentina",
-            "Armenia",
-            "Aruba",
-            "Australia",
-            "Austria",
-            "Azerbaijan",
-            "Bahamas",
-            "Bahrain",
-            "Bangladesh",
-            "Barbados",
-            "Belarus",
-            "Belgium",
-            "Belize",
-            "Benin",
-            "Bermuda",
-            "Bhutan",
-            "Bolivia",
-            "Bosnia and Herzegovina",
-            "Botswana",
-            "Brazil",
-            "Brunei",
-            "Bulgaria",
-            "Burkina Faso",
-            "Burundi",
-            "Cambodia",
-            "Cameroon",
-            "Canada",
-            "Cape Verde",
-            "Cayman Islands",
-            "Central African Republic",
-            "Chad",
-            "Chile",
-            "China",
-            "Colombia",
-            "Comoros",
-            "Congo",
-            "Costa Rica",
-            "Croatia",
-            "Cuba",
-            "Cyprus",
-            "Czech Republic",
-            "Denmark",
-            "Djibouti",
-            "Dominica",
-            "Dominican Republic",
-            "East Timor",
-            "Ecuador",
-            "Egypt",
-            "El Salvador",
-            "Equatorial Guinea",
-            "Eritrea",
-            "Estonia",
-            "Ethiopia",
-            "Euro Area",
-            "Faroe Islands",
-            "Fiji",
-            "Finland",
-            "France",
-            "Gabon",
-            "Gambia",
-            "Georgia",
-            "Germany",
-            "Ghana",
-            "Greece",
-            "Grenada",
-            "Guatemala",
-            "Guinea Bissau",
-            "Guinea",
-            "Guyana",
-            "Haiti",
-            "Honduras",
-            "Hong Kong",
-            "Hungary",
-            "Iceland",
-            "India",
-            "Indonesia",
-            "Iran",
-            "Iraq",
-            "Ireland",
-            "Isle of Man",
-            "Israel",
-            "Italy",
-            "Ivory Coast",
-            "Jamaica",
-            "Japan",
-            "Jordan",
-            "Kazakhstan",
-            "Kenya",
-            "Kiribati",
-            "Kosovo",
-            "Kuwait",
-            "Kyrgyzstan",
-            "Laos",
-            "Latvia",
-            "Lebanon",
-            "Lesotho",
-            "Liberia",
-            "Libya",
-            "Liechtenstein",
-            "Lithuania",
-            "Luxembourg",
-            "Macao",
-            "Macedonia",
-            "Madagascar",
-            "Malawi",
-            "Malaysia",
-            "Maldives",
-            "Mali",
-            "Malta",
-            "Mauritania",
-            "Mauritius",
-            "Mexico",
-            "Moldova",
-            "Monaco",
-            "Mongolia",
-            "Montenegro",
-            "Morocco",
-            "Mozambique",
-            "Myanmar",
-            "Namibia",
-            "Nepal",
-            "Netherlands",
-            "New Caledonia",
-            "New Zealand",
-            "Nicaragua",
-            "Niger",
-            "Nigeria",
-            "North Korea",
-            "Norway",
-            "Oman",
-            "Pakistan",
-            "Palestine",
-            "Panama",
-            "Papua New Guinea",
-            "Paraguay",
-            "Peru",
-            "Philippines",
-            "Poland",
-            "Portugal",
-            "Puerto Rico",
-            "Qatar",
-            "Republic of The Congo",
-            "Romania",
-            "Russia",
-            "Rwanda",
-            "Samoa",
-            "Sao Tome and Principe",
-            "Saudi Arabia",
-            "Senegal",
-            "Serbia",
-            "Seychelles",
-            "Sierra Leone",
-            "Singapore",
-            "Slovakia",
-            "Slovenia",
-            "Solomon Islands",
-            "Somalia",
-            "South Africa",
-            "South Korea",
-            "South Sudan",
-            "Spain",
-            "Sri Lanka",
-            "Sudan",
-            "Suriname",
-            "Swaziland",
-            "Sweden",
-            "Switzerland",
-            "Syria",
-            "Taiwan",
-            "Tajikistan",
-            "Tanzania",
-            "Thailand",
-            "Togo",
-            "Tonga",
-            "Trinidad and Tobago",
-            "Tunisia",
-            "Turkey",
-            "Turkmenistan",
-            "Uganda",
-            "Ukraine",
-            "United Arab Emirates",
-            "United Kingdom",
-            "United States",
-            "Uruguay",
-            "Uzbekistan",
-            "Vanuatu",
-            "Venezuela",
-            "Vietnam",
-            "Yemen",
-            "Zambia",
-            "Zimbabwe",
-        ];
-
-        foreach ($countries as $country) {			
-			$country = Country::create([
-				'name' => $country,
-                'slug' => strtolower(str_replace(' ', '-', $country)),                
+            $country = Country::create([
+                'name' => $name,
+                'slug' => strtolower(str_replace(' ', '-', $name)),
+                'code' => $code,
                 'status' => 1,
             ]);
 
             $entry = new Registry();
 
-			$entry->url              = 'countries/' . $country->slug;
-			$entry->destination      = 'Main\CountryController@router';
-			$entry->layout           = 'main.layouts.app';
-			$entry->view             = 'countries.index';
-			$entry->redirect         = false;
-			$entry->code             = 200;
-			$entry->meta_title       = $country->name . ' News and Prices';
-			$entry->meta_keywords    = 'Hazlitt Data, ' . $country->name . ', news and data';
-			$entry->meta_description = 'Hazlitt Data - ' . $country->name . ' prices, news and data';
-			$entry->meta_robots      = 'INDEX, FOLLOW';
+            $entry->url              = 'countries/' . $country->slug;
+            $entry->destination      = 'Main\CountryController@router';
+            $entry->layout           = 'main.layouts.app';
+            $entry->view             = 'countries.index';
+            $entry->redirect         = false;
+            $entry->code             = 200;
+            $entry->meta_title       = $country->name . ' News and Prices';
+            $entry->meta_keywords    = 'Hazlitt Data, ' . $country->name . ', news and data';
+            $entry->meta_description = 'Hazlitt Data - ' . $country->name . ' prices, news and data';
+            $entry->meta_robots      = 'INDEX, FOLLOW';
 
-			$entry->save();
+            $entry->save();
 
-			$country->registry()
-				->save($entry);
-        }
+            $country->registry()
+                ->save($entry);
+        });
     }
 }

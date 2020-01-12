@@ -16,28 +16,31 @@ class CreateCountriesTable extends Migration
         Schema::create('countries', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('code');
             $table->string('slug');
             $table->json('snippets')                
                 ->nullable();
-            $table->string('inflation')
+            $table->integer('population')
                 ->nullable();
-            $table->string('corporate_tax')
+            $table->json('inflation')
                 ->nullable();
-            $table->string('interest_rate')
+            $table->json('corporate_tax')
                 ->nullable();
-            $table->string('unemployment_rate')
+            $table->json('interest_rate')
                 ->nullable();
-            $table->string('labor_force')
+            $table->json('unemployment_rate')
                 ->nullable();
-            $table->string('income_tax')
+            $table->json('labor_force')
                 ->nullable();
-            $table->string('gdp')
+            $table->json('income_tax')
                 ->nullable();
-            $table->string('gov_debt_to_gdp')
+            $table->json('gdp')
                 ->nullable();
-            $table->string('central_bank_balance_sheet')
+            $table->json('gov_debt_to_gdp')
                 ->nullable();
-            $table->string('budget')
+            $table->json('central_bank_balance_sheet')
+                ->nullable();
+            $table->json('budget')
                 ->nullable();
             $table->tinyInteger('status')
                 ->default(0);

@@ -20,9 +20,17 @@ class CreateCommoditiesTable extends Migration
                 ->nullable();
             $table->json('snippets')
                 ->nullable();
-            $table->json('queries')
+            $table->integer('spot')
                 ->nullable();
-            $table->integer('price')
+            $table->json('historical_prices')
+                ->nullable();
+            $table->integer('supply')
+                ->nullable();
+            $table->json('historical_supply')
+                ->nullable();
+            $table->integer('demand')
+                ->nullable();
+            $table->json('historical_demand')
                 ->nullable();
             $table->tinyInteger('status')
                 ->default(0);

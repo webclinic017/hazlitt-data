@@ -6,17 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class Commodity extends Model
 {
-    protected $fillable = [
-        'id',
+    protected $fillable = [ 
         'name',
         'slug',
-        'snippets',                              
-        'price',           
-        'status',                    
+        'snippets',
+        'spot',
+        'historical_prices',
+        'supply',        
+        'historical_supply',
+        'demand',        
+        'historical_demand',  
+        'status',                
     ];
 
     public $casts = [        
-        'snippets' => 'json',     
+        'snippets' => 'json', 
+        'historical_prices' => 'json', 
+        'historical_supply' => 'json', 
+        'historical_demand' => 'json'
     ];   
 
     public function articles()

@@ -48,16 +48,19 @@ class Indicators extends Command
         foreach ($countries as $country) {
 
             $pages = collect([
-                'inflation' => 'inflation-cpi',
-                'corporate_tax' => 'corporate-tax-rate',
-                'interest_rate' => 'interest-rate',
-                'unemployment_rate' => 'unemployment-rate',
-                'labor_force' => 'labor-force-participation-rate',
-                'income_tax' => 'personal-income-tax-rate',
-                'gdp' => 'gdp-per-capita',
-                'gov_debt_to_gdp' => 'government-debt-to-gdp',
-                'central_bank_balance_sheet' => 'central-bank-balance-sheet',
-                'budget' => 'government-budget-value'
+                'population' => 'SP.POP.TOTL',
+                'gdp' => 'NY.GDP.MKTP.CD',
+                'inflation' => 'FP.CPI.TOTL',
+                'corporate_tax' => 'IC.TAX.TOTL.CP.ZS',
+                'interest_rate' => 'FR.INR.RINR',
+                'income' => 'NY.GNP.PCAP.CD',
+                'personal_savings' => 'NY.ADJ.SVNG.GN.ZS',
+                'unemployment_rate' => 'SL.UEM.TOTL.ZS',
+                'labor_force' => 'SL.TLF.CACT.ZS',
+                'income_tax' => 'GC.TAX.YPKG.ZS',                
+                'gov_debt_to_gdp' => 'GC.DOD.TOTL.GD.ZS',
+                'bank_reserves' => 'FI.RES.TOTL.CD',
+                'budget' => 'GC.NLD.TOTL.CN'
             ]);
 
             $pages->each(function ($slug, $indicator) use ($country, $client) {
