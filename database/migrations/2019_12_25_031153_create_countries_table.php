@@ -18,9 +18,11 @@ class CreateCountriesTable extends Migration
             $table->string('name');
             $table->string('code');
             $table->string('slug');
-            $table->json('snippets')                
+            $table->json('snippets')
                 ->nullable();
             $table->integer('population')
+                ->nullable();
+            $table->json('gdp')
                 ->nullable();
             $table->json('inflation')
                 ->nullable();
@@ -28,17 +30,19 @@ class CreateCountriesTable extends Migration
                 ->nullable();
             $table->json('interest_rate')
                 ->nullable();
+            $table->json('income')
+                ->nullable();
+            $table->json('personal_savings')
+                ->nullable();
             $table->json('unemployment_rate')
                 ->nullable();
             $table->json('labor_force')
                 ->nullable();
             $table->json('income_tax')
                 ->nullable();
-            $table->json('gdp')
-                ->nullable();
             $table->json('gov_debt_to_gdp')
                 ->nullable();
-            $table->json('central_bank_balance_sheet')
+            $table->json('bank_reserves')
                 ->nullable();
             $table->json('budget')
                 ->nullable();
