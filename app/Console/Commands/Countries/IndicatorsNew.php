@@ -5,15 +5,17 @@ namespace App\Console\Commands\Countries;
 use Illuminate\Console\Command;
 use App\Country;
 use Illuminate\Support\Carbon;
-use Unirest;
-// use Goutte\Client;
+use Unirest\Request;
+use Unirest\Request\Body;
+use Illuminate\Support\Arr;
+
 
 class IndicatorsNew extends Command
 {
     /**
      * The name and signature of the console command.
      *
-     * @var string
+     * @var strings
      */
     protected $signature = 'country:test';
 
@@ -61,29 +63,24 @@ class IndicatorsNew extends Command
             'budget' => 'GC.NLD.TOTL.CN'
         ]);
 
-        $indicator_codes = $indicators->join(';');
-        $per_page = '16000';
+        $indicator_codes = $indicators->join(';');        
+        $url = "https://api.worldbank.org/v2/country/";
+        $query = "?source=2&per_page=16000&format=json";
 
         foreach ($countries as $country) {
             try {
-                $this->comment('https://api.worldbank.org/v2/country/' . $country->code . '/indicator/' . $indicator_codes . '?per_page=' . $per_page . '&format=json');
+                $this->comment($url . $country->code . '/indicator/' . $indicator_codes . $query);                                
+                $response = Request::get($url . $country->code . '/indicator/' . $indicator_codes . $query);                                
+                $array = $response->body;
+                // $json = Body::json($response);
+                // dd($array[0]['indicator']);
+                dd(Arr::pluck($array, 'indicator'));
 
-                $query = array(
-                    'source' => '2',
-                    'per_page' => $per_page,
-                    'format' => 'json'
-                );
-
-                $response = Unirest\Request::get('https://api.worldbank.org/v2/country/' . $country->code . '/indicator/' . $indicator_codes, $query);
-                dd();
-                // $request = $client->request('GET', 'https://api.worldbank.org/v2/country/' . $country->code . '/indicator/' . $indicator_codes . '?per_page=' . $per_page . '&format=json');
-                dd($response->body);
             } catch (\Exception $e) {
                 $this->error($e);
                 report($e);
             }
         }
-        https://api.worldbank.org/v2/country/afg/indicator/SP.POP.TOTL;NY.GDP.MKTP.CD;FP.CPI.TOTL.ZG;IC.TAX.TOTL.CP.ZS;FR.INR.RINR;NY.GNP.PCAP.CD;NY.ADJ.SVNG.GN.ZS;SL.UEM.TOTL.ZS;SL.TLF.CACT.ZS;GC.TAX.YPKG.ZS;GC.DOD.TOTL.GD.ZS;FI.RES.TOTL.CD;GC.NLD.TOTL.CN?source=2&per_page=16000&format=json        
 
         // $pages->each(function ($slug, $indicator) use ($country, $client) {
 
