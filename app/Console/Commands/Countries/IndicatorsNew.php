@@ -72,9 +72,12 @@ class IndicatorsNew extends Command
                 $this->comment($url . $country->code . '/indicator/' . $indicator_codes . $query);                                
                 $response = Request::get($url . $country->code . '/indicator/' . $indicator_codes . $query);                                
                 $array = $response->body;
-                // $json = Body::json($response);
-                // dd($array[0]['indicator']);
-                dd(Arr::pluck($array, 'indicator'));
+                // $json = Body::json($response);                
+                // dd($array);
+                dd(Arr::get($array, '1.0.country.value'));
+                // dd(Arr::flatten($array));
+
+                               
 
             } catch (\Exception $e) {
                 $this->error($e);
