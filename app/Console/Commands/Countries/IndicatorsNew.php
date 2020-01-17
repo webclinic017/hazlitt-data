@@ -63,22 +63,43 @@ class IndicatorsNew extends Command
             'budget' => 'GC.NLD.TOTL.CN'
         ]);
 
-        $indicator_codes = $indicators->join(';');        
+        $indicator_codes = $indicators->join(';');
         $url = "https://api.worldbank.org/v2/country/";
         $query = "?source=2&per_page=16000&format=json";
 
         foreach ($countries as $country) {
             try {
-                $this->comment($url . $country->code . '/indicator/' . $indicator_codes . $query);                                
-                $response = Request::get($url . $country->code . '/indicator/' . $indicator_codes . $query);                                
-                $array = $response->body;
-                // $json = Body::json($response);                
-                // dd($array);
-                dd(Arr::get($array, '1.0.country.value'));
-                // dd(Arr::flatten($array));
+                $this->comment($url . $country->code . '/indicator/' . $indicator_codes . $query);
+                $response = Request::get($url . $country->code . '/indicator/' . $indicator_codes . $query);
+                $array = last($response->body);
+                
+                $data = collect();
+                foreach ($array as $object) {
+                    if ($object->value == null) {
+                        continue;
+                    }                   
+                    $data->concat([
+                            $object->indicator->id => [$object->date => $object->value]
+                    ]);                                        
+                }
+                dd($data);
+                // $country = Country::query()
+                //     ->whereName($country->name)
+                //     ->first();
 
-                               
-
+                // $indicators->each(function ($id, $indicator) use ($object, $country) {
+                //     if ($indicator == 'population') {
+                //         $country->update([
+                //             'population' => ($object->indicator->id == $id ? $object->value : 0)
+                //         ]);
+                //     } else {
+                //         $country->update([
+                //             $indicator => [$object->date => ($object->indicator->id == $id ? $object->value : null)]
+                //         ]);
+                //         $this->info($country->name . ' ' . $indicator . ' - ' . $object->value . ' - saved');
+                //     }
+                // });
+                // }
             } catch (\Exception $e) {
                 $this->error($e);
                 report($e);
