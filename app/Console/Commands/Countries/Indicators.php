@@ -9,7 +9,7 @@ use Unirest\Request;
 use Unirest\Request\Body;
 use Illuminate\Support\Arr;
 
-class IndicatorsNew extends Command
+class Indicators extends Command
 {
     /**
      * The name and signature of the console command.
@@ -72,27 +72,34 @@ class IndicatorsNew extends Command
                 $response = Request::get($url . $country->code . '/indicator/' . $indicator_codes . $query);
                 $array = last($response->body);
                 
-                $figures = collect();
+                $collection = collect();
                 foreach ($array as $object) {
                     if (empty($object->value)) {
                         continue;
                     }
-                    $figures->push([
+                    $collection->push([
                         'indicator' => $object->indicator->id,
                         'date' => $object->date,
                         'value' => $object->value
                     ]);
                 }
-                $data = $figures->groupBy('indicator');
+                $grouped_stats = $collection->groupBy('indicator');
+                $data = collect();
+                $grouped_stats->each(function ($group, $indicator) use ($data) {
+                    $keyed = $group->mapWithKeys(function ($set) {
+                        return [$set['date'] => $set['value']];
+                    });
+                    $data->put($indicator, $keyed);
+                });
 
                 $indicators->each(function ($id, $indicator) use ($data, $country) {
                     if (isset($data[$id])) {
                         $country->update([
-                            $indicator => $data[$id][0]['indicator'] == $id ? $data[$id] : null,
+                            $indicator =>  $data[$id]
                         ]);
-                        $this->info("saved $indicator");
+                        $this->info("saved $country->name $indicator");
                     }
-                });                
+                });
             } catch (\Exception $e) {
                 $this->error($e);
                 report($e);
