@@ -8,23 +8,28 @@ class Country extends Model
 {
     protected $fillable = [
         'name',
+        'code',
         'slug',
         'snippets',
+        'population',
+        'gdp',
         'inflation',
         'corporate_tax',
         'interest_rate',
+        'income',
+        'personal_savings',
         'unemployment_rate',
         'labor_force',
         'income_tax',
-        'gdp',
         'gov_debt_to_gdp',
-        'central_bank_balance_sheet',
+        'bank_reserves',
         'budget',
         'status'
     ];
 
     public $casts = [
         'snippets' => 'json',
+        'population' => 'json',
         'inflation' => 'json',
         'corporate_tax' => 'json',
         'interest_rate' => 'json',

@@ -4,16 +4,17 @@ namespace App\Console\Commands\Countries;
 
 use Illuminate\Console\Command;
 use App\Country;
-use App\Commodity;
 use Illuminate\Support\Carbon;
-use Goutte\Client;
+use Unirest\Request;
+use Unirest\Request\Body;
+use Illuminate\Support\Arr;
 
-class Indicators extends Command
+class IndicatorsNew extends Command
 {
     /**
      * The name and signature of the console command.
      *
-     * @var string
+     * @var strings
      */
     protected $signature = 'country:indicators';
 
@@ -22,7 +23,7 @@ class Indicators extends Command
      *
      * @var string
      */
-    protected $description = 'Scrape country indicators';
+    protected $description = 'Collect indicators by country from World Bank';
 
     /**
      * Create a new command instance.
@@ -43,60 +44,62 @@ class Indicators extends Command
     {
         $start = microtime(true);
         $countries = Country::all();
-        $client = new Client();
+        // $client = new Client();
+
+        $indicators = collect([
+            'population' => 'SP.POP.TOTL',
+            'gdp' => 'NY.GDP.MKTP.CD',
+            'inflation' => 'FP.CPI.TOTL.ZG',
+            'corporate_tax' => 'IC.TAX.TOTL.CP.ZS',
+            'interest_rate' => 'FR.INR.RINR',
+            'income' => 'NY.GNP.PCAP.CD',
+            'personal_savings' => 'NY.ADJ.SVNG.GN.ZS',
+            'unemployment_rate' => 'SL.UEM.TOTL.ZS',
+            'labor_force' => 'SL.TLF.CACT.ZS',
+            'income_tax' => 'GC.TAX.YPKG.ZS',
+            'gov_debt_to_gdp' => 'GC.DOD.TOTL.GD.ZS',
+            'bank_reserves' => 'FI.RES.TOTL.CD',
+            'budget' => 'GC.NLD.TOTL.CN'
+        ]);
+
+        $indicator_codes = $indicators->join(';');
+        $url = "https://api.worldbank.org/v2/country/";
+        $query = "?source=2&per_page=16000&format=json";
 
         foreach ($countries as $country) {
-
-            $pages = collect([
-                'inflation' => 'inflation-cpi',
-                'corporate_tax' => 'corporate-tax-rate',
-                'interest_rate' => 'interest-rate',
-                'unemployment_rate' => 'unemployment-rate',
-                'labor_force' => 'labor-force-participation-rate',
-                'income_tax' => 'personal-income-tax-rate',
-                'gdp' => 'gdp-per-capita',
-                'gov_debt_to_gdp' => 'government-debt-to-gdp',
-                'central_bank_balance_sheet' => 'central-bank-balance-sheet',
-                'budget' => 'government-budget-value'
-            ]);
-
-            $pages->each(function ($slug, $indicator) use ($country, $client) {
-
-                try {
-
-                    $this->comment('https://tradingeconomics.com/' . $country->slug .  '/' . $slug);
-                    $crawler = $client->request('GET', 'https://tradingeconomics.com/' . $country->slug .  '/' . $slug);
-
-                    $crawler->filter('body')->each(function ($node) use ($country, $indicator) {
-                        if (!isset($node)) {
-                            $this->error($country->name . ' ' . $indicator . ' indicator missing.');
-                            return;
-                        }
-
-                        if (
-                            $node->filter('#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)')->count() == 0
-                        ) {
-                            $this->error($country->name . ' ' . $indicator . ' indicator missing.');
-                            return;
-                        }
-
-                        $country = Country::query()
-                            ->whereName($country->name);
-
-                        $country->update([
-                            $indicator => $node->filter('#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)')->text()
-                        ]);
-                    });                    
-                    $this->info('Saved ' . $country->name . ' ' . $indicator);                    
-
-                } catch (\Exception $e) {
-                    $this->error($e);
-                    report($e);
+            try {
+                $this->comment($url . $country->code . '/indicator/' . $indicator_codes . $query);
+                $response = Request::get($url . $country->code . '/indicator/' . $indicator_codes . $query);
+                $array = last($response->body);
+                
+                $figures = collect();
+                foreach ($array as $object) {
+                    if (empty($object->value)) {
+                        continue;
+                    }
+                    $figures->push([
+                        'indicator' => $object->indicator->id,
+                        'date' => $object->date,
+                        'value' => $object->value
+                    ]);
                 }
-            });
+                $data = $figures->groupBy('indicator');
+
+                $indicators->each(function ($id, $indicator) use ($data, $country) {
+                    if (isset($data[$id])) {
+                        $country->update([
+                            $indicator => $data[$id][0]['indicator'] == $id ? $data[$id] : null,
+                        ]);
+                        $this->info("saved $indicator");
+                    }
+                });                
+            } catch (\Exception $e) {
+                $this->error($e);
+                report($e);
+            }
         }
         $end = microtime(true);
-        $time = number_format(($end - $start)/60);
+        $time = number_format(($end - $start) / 60);
         $this->info("\n" . 'Done: ' . $time . ' minutes');
     }
 }

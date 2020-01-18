@@ -20,7 +20,7 @@ class CreateCountriesTable extends Migration
             $table->string('slug');
             $table->json('snippets')
                 ->nullable();
-            $table->integer('population')
+            $table->json('population')
                 ->nullable();
             $table->json('gdp')
                 ->nullable();
