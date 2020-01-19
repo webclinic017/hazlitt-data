@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Country;
 use Illuminate\Support\Carbon;
 use Unirest\Request;
+use Unirest\Request\Header;
 use Unirest\Request\Body;
 use Illuminate\Support\Arr;
 
@@ -70,36 +71,49 @@ class Indicators extends Command
             try {
                 $this->comment($url . $country->code . '/indicator/' . $indicator_codes . $query);
                 $response = Request::get($url . $country->code . '/indicator/' . $indicator_codes . $query);
-                $array = last($response->body);
-                
-                $collection = collect();
-                foreach ($array as $object) {
-                    if (empty($object->value)) {
-                        continue;
-                    }
-                    $collection->push([
+                if ($response->code == 200) {
+                    $array = last($response->body);
+                    $collection = collect();
+
+                    if (gettype($array) == 'array') {
+                        if (count($array) > 1) {
+                            foreach ($array as $object) {
+                                if (empty($object->value)) {
+                                    continue;
+                                }
+                                $collection->push([
                         'indicator' => $object->indicator->id,
                         'date' => $object->date,
                         'value' => $object->value
                     ]);
-                }
-                $grouped_stats = $collection->groupBy('indicator');
-                $data = collect();
-                $grouped_stats->each(function ($group, $indicator) use ($data) {
-                    $keyed = $group->mapWithKeys(function ($set) {
-                        return [$set['date'] => $set['value']];
-                    });
-                    $data->put($indicator, $keyed);
-                });
+                            }
+                            $grouped_stats = $collection->groupBy('indicator');
+                            $data = collect();
+                            $grouped_stats->each(function ($group, $indicator) use ($data) {
+                                $filtered = $group->map(function ($set) {
+                                    unset($set['indicator']);
+                                    return $set;
+                                });
+                                $data->put($indicator, $filtered);
+                            });
 
-                $indicators->each(function ($id, $indicator) use ($data, $country) {
-                    if (isset($data[$id])) {
-                        $country->update([
+                            $indicators->each(function ($id, $indicator) use ($data, $country) {
+                                if (isset($data[$id])) {
+                                    $country->update([
                             $indicator =>  $data[$id]
                         ]);
-                        $this->info("saved $country->name $indicator");
+                                    $this->info("saved $country->name $indicator");
+                                }
+                            });
+                        } else {
+                            $this->error($array);
+                        }
+                    } else {
+                        $this->error(gettype($array));
                     }
-                });
+                } else {
+                    $this->error($response->code . ' - ' . $response->headers);
+                }
             } catch (\Exception $e) {
                 $this->error($e);
                 report($e);
