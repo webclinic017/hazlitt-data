@@ -32,6 +32,8 @@ class CreateCommoditiesTable extends Migration
                 ->nullable();
             $table->json('historical_demand')
                 ->nullable();
+            $table->string('quandl_code')
+                ->nullable();
             $table->tinyInteger('status')
                 ->default(0);
             $table->timestamps();

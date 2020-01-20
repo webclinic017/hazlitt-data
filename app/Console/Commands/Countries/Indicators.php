@@ -44,8 +44,7 @@ class Indicators extends Command
     public function handle()
     {
         $start = microtime(true);
-        $countries = Country::all();
-        // $client = new Client();
+        $countries = Country::all();        
 
         $indicators = collect([
             'population' => 'SP.POP.TOTL',
