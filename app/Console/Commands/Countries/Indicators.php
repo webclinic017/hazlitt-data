@@ -63,7 +63,7 @@ class Indicators extends Command
         ]);
 
         $indicator_codes = $indicators->join(';');
-        $url = "https://api.worldbank.org/v2/country/";
+        $url = config('services.worldbank.url');
         $query = "?source=2&per_page=16000&format=json";
 
         foreach ($countries as $country) {

@@ -37,29 +37,13 @@ class Prices extends Command
      * @return mixed
      */
     public function handle()
-    {        
+    {
         $start = microtime(true);
-        $commodities = Commodity::all();        
-
-        $indicators = collect([
-            'gold' => 'CME_GC1',
-            'gdp' => 'NY.GDP.MKTP.CD',
-            'inflation' => 'FP.CPI.TOTL.ZG',
-            'corporate_tax' => 'IC.TAX.TOTL.CP.ZS',
-            'interest_rate' => 'FR.INR.RINR',
-            'income' => 'NY.GNP.PCAP.CD',
-            'personal_savings' => 'NY.ADJ.SVNG.GN.ZS',
-            'unemployment_rate' => 'SL.UEM.TOTL.ZS',
-            'labor_force' => 'SL.TLF.CACT.ZS',
-            'income_tax' => 'GC.TAX.YPKG.ZS',
-            'gov_debt_to_gdp' => 'GC.DOD.TOTL.GD.ZS',
-            'bank_reserves' => 'FI.RES.TOTL.CD',
-            'budget' => 'GC.NLD.TOTL.CN'
-        ]);
+        $commodities = Commodity::all();
 
         $indicator_codes = $indicators->join(';');
-        $url = "https://www.quandl.com/api/v3/datasets/";
-        $api_key = "Z8h3qyUutR2CP3jYpscW";
+        $url = config('services.quandl.url');
+        $api_key = config('services.quandl.key');
 
         foreach ($countries as $country) {
             try {
