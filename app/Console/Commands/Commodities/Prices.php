@@ -4,6 +4,11 @@ namespace App\Console\Commands\Commodities;
 
 use Illuminate\Console\Command;
 use App\Commodity;
+use Illuminate\Support\Carbon;
+use Unirest\Request;
+use Unirest\Request\Header;
+use Unirest\Request\Body;
+use Illuminate\Support\Arr;
 
 class Prices extends Command
 {
@@ -19,7 +24,7 @@ class Prices extends Command
      *
      * @var string
      */
-    protected $description = 'API Call to Quandl for commodity price data';
+    protected $description = 'Fetch commodity prices from API';
 
     /**
      * Create a new command instance.
@@ -45,55 +50,32 @@ class Prices extends Command
         $api_key = config('services.quandl.key');
 
         foreach ($commodities as $commodity) {
-            try {
-                $this->comment($url . $commodity->quandl_code . '?api_key=' . $api_key);
-                $response = Request::get($url . $commodity->quandl_code . '?api_key=' . $api_key);
-                if ($response->code == 200) {
-                    $array = last($response->body);
-                    $collection = collect();
-
-                    if (gettype($array) == 'array') {
-                        if (count($array) > 1) {
-                            foreach ($array as $object) {
-                                if (empty($object->value)) {
-                                    continue;
-                                }
-                                $collection->push([
-                        'indicator' => $object->indicator->id,
-                        'date' => $object->date,
-                        'value' => $object->value
-                    ]);
-                            }
-                            $grouped_stats = $collection->groupBy('indicator');
-                            $data = collect();
-                            $grouped_stats->each(function ($group, $indicator) use ($data) {
-                                $filtered = $group->map(function ($set) {
-                                    unset($set['indicator']);
-                                    return $set;
-                                });
-                                $data->put($indicator, $filtered);
-                            });
-
-                            $indicators->each(function ($id, $indicator) use ($data, $country) {
-                                if (isset($data[$id])) {
-                                    $country->update([
-                            $indicator =>  $data[$id]
-                        ]);
-                                    $this->info("saved $country->name $indicator");
-                                }
-                            });
-                        } else {
-                            $this->error($array);
-                        }
+            if ($commodity->source == 'quandl') {
+                try {
+                    $this->comment($url . $commodity->code . '?api_key=' . $api_key);
+                    $response = Request::get($url . $commodity->code . '?api_key=' . $api_key);
+                    if ($response->code == 200) {
+                        $object = last($response->body);                        
+                        $columns = $object->column_names;
+                        $this->info(collect($columns));
+                        
+                        // $collection = collect();
+                        // if (gettype($object) == 'object') {
+                        //     foreach ($object->data as $array) {
+                        //         $count = count($array);
+                        //         $collection->push([
+                        //             'date' => $array[0],
+                        //             'last' => $array[1],
+                        //         ]);
+                        //     }
+                        // }
                     } else {
-                        $this->error(gettype($array));
+                        $this->error($response->code);
                     }
-                } else {
-                    $this->error($response->code . ' - ' . $response->headers);
+                } catch (\Exception $e) {
+                    $this->error($e);
+                    report($e);
                 }
-            } catch (\Exception $e) {
-                $this->error($e);
-                report($e);
             }
         }
         $end = microtime(true);

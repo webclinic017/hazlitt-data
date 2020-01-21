@@ -10,20 +10,19 @@ class Commodity extends Model
         'name',
         'slug',
         'snippets',
-        'spot',
-        'historical_prices',
+        'prices',
         'supply',        
-        'historical_supply',
-        'demand',        
-        'historical_demand',  
+        'demand',
+        'code',
+        'source',        
         'status',                
     ];
 
     public $casts = [        
         'snippets' => 'json', 
-        'historical_prices' => 'json', 
-        'historical_supply' => 'json', 
-        'historical_demand' => 'json'
+        'prices' => 'json', 
+        'supply' => 'json', 
+        'demand' => 'json'
     ];   
 
     public function articles()

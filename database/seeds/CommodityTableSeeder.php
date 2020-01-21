@@ -108,11 +108,12 @@ class CommodityTableSeeder extends Seeder
             'Zinc' => ['code' => 'LME/PR_ZI', 'source' => 'quandl']
         ]);
 
-        $commodities_codes->each(function ($quandl_code, $type) {
+        $commodities_codes->each(function ($data, $type) {			
             $commodity = Commodity::create([
                 'name' => $type,
                 'slug' => strtolower(str_replace(' ', '-', $type)),
-                'quandl_code' => $quandl_code,
+				'code' => collect($data)->get('code'),
+				'source' => collect($data)->get('source'),
                 'status' => 1,
             ]);
 

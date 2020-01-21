@@ -31,7 +31,7 @@ return [
     ],
 
     'quandl' => [
-        'key' => env('Z8h3qyUutR2CP3jYpscW'),
+        'key' => env('QUANDL_API_KEY'),
         'url' => 'https://www.quandl.com/api/v3/datasets/'
     ],
 

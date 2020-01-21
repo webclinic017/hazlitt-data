@@ -16,23 +16,18 @@ class CreateCommoditiesTable extends Migration
         Schema::create('commodities', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('slug')
-                ->nullable();
+            $table->string('slug');          
             $table->json('snippets')
                 ->nullable();
-            $table->integer('spot')
+            $table->json('prices')
                 ->nullable();
-            $table->json('historical_prices')
+            $table->json('supply')
                 ->nullable();
-            $table->integer('supply')
+            $table->json('demand')
                 ->nullable();
-            $table->json('historical_supply')
+            $table->string('code')
                 ->nullable();
-            $table->integer('demand')
-                ->nullable();
-            $table->json('historical_demand')
-                ->nullable();
-            $table->string('quandl_code')
+            $table->string('source')
                 ->nullable();
             $table->tinyInteger('status')
                 ->default(0);
