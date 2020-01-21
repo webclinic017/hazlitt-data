@@ -40,15 +40,14 @@ class Prices extends Command
     {
         $start = microtime(true);
         $commodities = Commodity::all();
-
-        $indicator_codes = $indicators->join(';');
+        
         $url = config('services.quandl.url');
         $api_key = config('services.quandl.key');
 
-        foreach ($countries as $country) {
+        foreach ($commodities as $commodity) {
             try {
-                $this->comment($url . $country->code . '/indicator/' . $indicator_codes . $query);
-                $response = Request::get($url . $country->code . '/indicator/' . $indicator_codes . $query);
+                $this->comment($url . $commodity->quandl_code . '?api_key=' . $api_key);
+                $response = Request::get($url . $commodity->quandl_code . '?api_key=' . $api_key);
                 if ($response->code == 200) {
                     $array = last($response->body);
                     $collection = collect();

@@ -6,146 +6,133 @@ use App\Registry;
 
 class CommodityTableSeeder extends Seeder
 {
-	/**
-	 * Run the database seeds.
-	 *
-	 * @return void
-	 */
-	public function run()
-	{
-		Commodity::truncate();
-		
-		//All commodities with quandl codes
-		$commodities_codes = collect([
-			'Aluminum' => 'LME/PR_AL',
-			'Antimony' => '',
-			'Apples' => '',	
-			'Arsenic' => '',	
-			'Bananas' => 'ODA/PBANSOP_USD',
-			'Barley' => 'WORLDBANK/WLD_BARLEY',
-			'Bauxite' => '',	
-			'Bismuth' => '',	
-			'Butter' => '',	
-			'Brent Oil' => 'CHRIS/ICE_B1',
-			'Cadmium' => '',	
-			'Cattle' => 'ODA/PBEEF_USD',
-			'Cement' => '',	
-			'Cheese' => '',	
-			'Chromium' => '',	
-			'Coal' => 'EPI/152',
-			'Cobalt' => 'LME/PR_CO',
-			'Cocoa' => 'CHRIS/ICE_CC1',
-			'Coffee' => 'CHRIS/ICE_KC1',
-			'Coke' => '',
-			'Copper' => 'LME/PR_CU',
-			'Corn' => 'CHRIS/CME_C1',
-			'Corn Oil' => '',	
-			'Cotton' => 'CHRIS/ICE_CT1',
-			'Cottonseed' => '',	
-			'Crude Oil' => 'CHRIS/CME_CL1',
-			'Diamonds' => '',	
-			'Eggs' => '',	
-			'Electric Power' => '',	
-			'Ethanol' => '',	
-			'Fish' => 'ODA/PFISH_USD',
-			'Flaxseed' => '',	
-			'Linseed Oil' => '',	
-			'Fruits' => '',	
-			'Gas' => '',	
-			'Gasoline' => 'CHRIS/CME_RB1',
-			'Gold' => 'CME_GC1',
-			'Grain Sorghum' => '',	
-			'Hay' => '',	
-			'Heating Oil' => '',	
-			'Hides' => 'ODA/PHIDE_USD',
-			'Leather' => '',	
-			'Hogs' => 'CHRIS/CME_LN1',
-			'Honey' => '',	
-			'Iridium' => 'JOHNMATT/IRID',
-			'Iron' => 'ODA/PIORECR_USD',
-			'Steel' => '',	
-			'Lard' => 'ODA/PLAMB_USD',
-			'Lead' => 'LME/PR_PB',
-			'Lumber' => 'CHRIS/CME_LB1LME/PR_PB',
-			'Magnesium' => '',	
-			'Manganese' => '',	
-			'Meats' => '',	
-			'Mercury' => '',	
-			'Milk' => 'CHRIS/CME_DA1',
-			'Molybdenum' => 'LME/PR_MO',
-			'Nickel' => 'LME/PR_NI',
-			'Oats' => 'CHRIS/CME_O1',
-			'Olive Oil' => 'ODA/POLVOIL_USD',
-			'Onions' => '',	
-			'Oranges' => 'ODA/PORANG_USD',
-			'Orange Juice' => 'CHRIS/ICE_OJ1',
-			'Palladium' => 'CHRIS/CME_PA1',
-			'Palm Oil' => 'ODA/PPOIL_USD',
-			'Paper' => '',	
-			'Peanuts' => 'ODA/PGNUTS_USD',
-			'Pepper' => '',	
-			'Petroleum' => '',	
-			'Plastics' => '',	
-			'Platinum' => 'CHRIS/CME_PL1',
-			'Potatoes' => '',	
-			'Poultry' => 'ODA/PPOULT_USD',
-			'Rapeseed Oil' => 'ODA/PROIL_USD',
-			'Rhodium' => 'JOHNMATT/RHOD',
-			'Rice' => 'CHRIS/CME_RR1',
-			'Ruthenium' => 'JOHNMATT/RUTH',
-			'Rubber' => 'ODA/PRUBB_USD',
-			'Rye' => '',	
-			'Salt' => '',	
-			'Salmon' => 'ODA/PSALM_USD',
-			'Sheep' => '',	
-			'Shrimp' => 'ODA/PSHRI_USD',
-			'Silk' => '',	
-			'Silver' => 'CHRIS/CME_SI1',
-			'Soybeans' => 'CHRIS/CME_S1',
-			'Steel' => 'LME/PR_FM',
-			'Sugar' => 'CHRIS/ICE_SB1',
-			'Sulfur' => '',	
-			'Tallow' => '',	
-			'Tea' => 'ODA/PTEA_USD',
-			'Tin' => 'LME/PR_TN',
-			'Titanium' => '',	
-			'Tobacco' => 'WORLDBANK/WLD_TOBAC_US',
-			'Tungsten' => '',	
-			'Turkeys' => '',	
-			'Uranium' => '',	
-			'Vanadium' => '',	
-			'Vegetables' => '',	
-			'Wheat' => 'CHRIS/CME_W1',
-			'Wool' => 'ODA/PWOOLC_USD',
-			'Zinc' => 'LME/PR_ZI',
-		]);
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        Commodity::truncate();
+        
+        //All commodities with quandl codes
+        $commodities_codes = collect([
+            'Aluminum' => ['code' => 'ODA/PALUM_USD', 'source' => 'quandl'],
+            'Antimony' => ['code' => '', 'source' => ''],
+            'Bananas' => ['code' => 'ODA/PBANSOP_USD', 'source' => 'quandl'],
+            'Barley' => ['code' => 'WORLDBANK/WLD_BARLEY', 'source' => 'quandl'],
+            'Bauxite' => ['code' => '', 'source' => ''],
+            'Bismuth' => ['code' => '', 'source' => ''],
+            'Butter' => ['code' => '', 'source' => ''],
+            'Brent Oil' => ['code' => 'CHRIS/ICE_B1', 'source' => 'quandl'],
+            'Cadmium' => ['code' => '', 'source' => ''],
+            'Cattle' => ['code' => 'ODA/PBEEF_USD', 'source' => 'quandl'],
+            'Chromium' => ['code' => '', 'source' => ''],
+            'Coal' => ['code' => 'EPI/152', 'source' => 'quandl'],
+            'Cobalt' => ['code' => 'LME/PR_CO', 'source' => 'quandl'],
+            'Cocoa' => ['code' => 'CHRIS/ICE_CC1', 'source' => 'quandl'],
+            'Coffee' => ['code' => 'CHRIS/ICE_KC1', 'source' => 'quandl'],
+            'Copper' => ['code' => 'ODA/PCOPP_USD', 'source' => 'quandl'],
+            'Corn' => ['code' => 'CHRIS/CME_C1', 'source' => 'quandl'],
+            'Corn Oil' => ['code' => '', 'source' => ''],
+            'Cotton' => ['code' => 'CHRIS/ICE_CT1', 'source' => 'quandl'],
+            'Cottonseed' => ['code' => '', 'source' => ''],
+            'Crude Oil' => ['code' => 'CHRIS/CME_CL1', 'source' => 'quandl'],
+            'Diamonds' => ['code' => '', 'source' => ''],
+            'Eggs' => ['code' => '', 'source' => ''],
+            'Electric Power' => ['code' => '', 'source' => ''],
+            'Ethanol' => ['code' => '', 'source' => ''],
+            'Fish' => ['code' => 'ODA/PFISH_USD', 'source' => 'quandl'],
+            'Flaxseed' => ['code' => '', 'source' => ''],
+            'Linseed Oil' => ['code' => '', 'source' => ''],
+            'Fruits' => ['code' => '', 'source' => ''],
+            'Gas' => ['code' => '', 'source' => ''],
+            'Gasoline' => ['code' => 'CHRIS/CME_RB1', 'source' => 'quandl'],
+            'Gold' => ['code' => 'CME_GC1', 'source' => 'quandl'],
+            'Grain Sorghum' => ['code' => '', 'source' => ''],
+            'Hay' => ['code' => '', 'source' => ''],
+            'Heating Oil' => ['code' => '', 'source' => ''],
+            'Hides' => ['code' => 'ODA/PHIDE_USD', 'source' => 'quandl'],
+            'Leather' => ['code' => '', 'source' => ''],
+            'Hogs' => ['code' => 'CHRIS/CME_LN1', 'source' => 'quandl'],
+            'Honey' => ['code' => '', 'source' => ''],
+            'Iridium' => ['code' => 'JOHNMATT/IRID', 'source' => 'quandl'],
+            'Iron Ore' => ['code' => 'ODA/PIORECR_USD', 'source' => 'quandl'],
+            'Lard' => ['code' => 'ODA/PLAMB_USD', 'source' => 'quandl'],
+            'Lead' => ['code' => 'LME/PR_PB', 'source' => 'quandl'],
+            'Lumber' => ['code' => 'CHRIS/CME_LB1LME/PR_PB', 'source' => 'quandl'],
+            'Magnesium' => ['code' => '', 'source' => ''],
+            'Manganese' => ['code' => '', 'source' => ''],
+            'Mercury' => ['code' => '', 'source' => ''],
+            'Milk' => ['code' => 'CHRIS/CME_DA1', 'source' => 'quandl'],
+            'Molybdenum' => ['code' => 'LME/PR_MO', 'source' => 'quandl'],
+            'Nickel' => ['code' => 'LME/PR_NI', 'source' => 'quandl'],
+            'Oats' => ['code' => 'CHRIS/CME_O1', 'source' => 'quandl'],
+            'Olive Oil' => ['code' => 'ODA/POLVOIL_USD', 'source' => 'quandl'],
+            'Onions' => ['code' => '', 'source' => ''],
+            'Oranges' => ['code' => 'ODA/PORANG_USD', 'source' => 'quandl'],
+            'Orange Juice' => ['code' => 'CHRIS/ICE_OJ1', 'source' => 'quandl'],
+            'Palladium' => ['code' => 'CHRIS/CME_PA1', 'source' => 'quandl'],
+            'Palm Oil' => ['code' => 'ODA/PPOIL_USD', 'source' => 'quandl'],
+            'Peanuts' => ['code' => 'ODA/PGNUTS_USD', 'source' => 'quandl'],
+            'Petroleum' => ['code' => '', 'source' => ''],
+            'Plastics' => ['code' => '', 'source' => ''],
+            'Platinum' => ['code' => 'CHRIS/CME_PL1', 'source' => 'quandl'],
+            'Potatoes' => ['code' => '', 'source' => ''],
+            'Poultry' => ['code' => 'ODA/PPOULT_USD', 'source' => 'quandl'],
+            'Rapeseed Oil' => ['code' => 'ODA/PROIL_USD', 'source' => 'quandl'],
+            'Rhodium' => ['code' => 'JOHNMATT/RHOD', 'source' => 'quandl'],
+            'Rice' => ['code' => 'CHRIS/CME_RR1', 'source' => 'quandl'],
+            'Ruthenium' => ['code' => 'JOHNMATT/RUTH', 'source' => 'quandl'],
+            'Rubber' => ['code' => 'ODA/PRUBB_USD', 'source' => 'quandl'],
+            'Salt' => ['code' => '', 'source' => ''],
+            'Salmon' => ['code' => 'ODA/PSALM_USD', 'source' => 'quandl'],
+            'Shrimp' => ['code' => 'ODA/PSHRI_USD', 'source' => 'quandl'],
+            'Silk' => ['code' => '', 'source' => ''],
+            'Silver' => ['code' => 'CHRIS/CME_SI1', 'source' => 'quandl'],
+            'Soybeans' => ['code' => 'CHRIS/CME_S1', 'source' => 'quandl'],
+            'Steel' => ['code' => 'LME/PR_FM', 'source' => 'quandl'],
+            'Sugar' => ['code' => 'CHRIS/ICE_SB1', 'source' => 'quandl'],
+            'Sulfur' => ['code' => '', 'source' => ''],
+            'Tallow' => ['code' => '', 'source' => ''],
+            'Tea' => ['code' => 'ODA/PTEA_USD', 'source' => 'quandl'],
+            'Tin' => ['code' => 'LME/PR_TN', 'source' => 'quandl'],
+            'Titanium' => ['code' => '', 'source' => ''],
+            'Tobacco' => ['code' => 'WORLDBANK/WLD_TOBAC_US', 'source' => 'quandl'],
+            'Tungsten' => ['code' => '', 'source' => ''],
+            'Turkeys' => ['code' => '', 'source' => ''],
+            'Uranium' => ['code' => '', 'source' => ''],
+            'Vanadium' => ['code' => '', 'source' => ''],
+            'Wheat' => ['code' => 'CHRIS/CME_W1', 'source' => 'quandl'],
+            'Wool' => ['code' => 'ODA/PWOOLC_USD', 'source' => 'quandl'],
+            'Zinc' => ['code' => 'LME/PR_ZI', 'source' => 'quandl']
+        ]);
 
-		$commodities_codes->each(function($quandl_code, $type) {
-				
-			$commodity = Commodity::create([
-				'name' => $type,
-				'slug' => strtolower(str_replace(' ', '-', $type)),
-				'quandl_code' => $quandl_code,
+        $commodities_codes->each(function ($quandl_code, $type) {
+            $commodity = Commodity::create([
+                'name' => $type,
+                'slug' => strtolower(str_replace(' ', '-', $type)),
+                'quandl_code' => $quandl_code,
                 'status' => 1,
-			]);						
+            ]);
 
-			$entry = new Registry();
+            $entry = new Registry();
 
-			$entry->url              = 'commodities/' . $commodity->slug;
-			$entry->destination      = 'Main\CommodityController@router';
-			$entry->layout           = 'main.layouts.app';
-			$entry->view             = 'commodities.index';
-			$entry->redirect         = false;
-			$entry->code             = 200;
-			$entry->meta_title       = $commodity->name . ' News and Prices';
-			$entry->meta_keywords    = 'Hazlitt Data, ' . $commodity->name . ', news and data';
-			$entry->meta_description = 'Hazlitt Data - ' . $commodity->name . ' prices, news and data';
-			$entry->meta_robots      = 'INDEX, FOLLOW';
+            $entry->url              = 'commodities/' . $commodity->slug;
+            $entry->destination      = 'Main\CommodityController@router';
+            $entry->layout           = 'main.layouts.app';
+            $entry->view             = 'commodities.index';
+            $entry->redirect         = false;
+            $entry->code             = 200;
+            $entry->meta_title       = $commodity->name . ' News and Prices';
+            $entry->meta_keywords    = 'Hazlitt Data, ' . $commodity->name . ', news and data';
+            $entry->meta_description = 'Hazlitt Data - ' . $commodity->name . ' prices, news and data';
+            $entry->meta_robots      = 'INDEX, FOLLOW';
 
-			$entry->save();
+            $entry->save();
 
-			$commodity->registry()
-				->save($entry);
-		});
-	}
+            $commodity->registry()
+                ->save($entry);
+        });
+    }
 }

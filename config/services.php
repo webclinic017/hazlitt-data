@@ -33,7 +33,7 @@ return [
     'quandl' => [
         'key' => env('Z8h3qyUutR2CP3jYpscW'),
         'url' => 'https://www.quandl.com/api/v3/datasets/'
-    ]
+    ],
 
     'worldbank' => [
         'url' => 'https://api.worldbank.org/v2/country/'
