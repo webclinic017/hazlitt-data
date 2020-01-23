@@ -52,12 +52,12 @@ class Prices extends Command
         foreach ($commodities as $commodity) {
             if ($commodity->source == 'quandl') {
                 try {
-                    $this->comment($url . $commodity->code . '?api_key=' . $api_key);
+                    $this->comment($commodity->name . " - " . $url . $commodity->code . '?api_key=' . $api_key);
                     $response = Request::get($url . $commodity->code . '?api_key=' . $api_key);
                     if ($response->code == 200) {
                         $object = last($response->body);                        
-                        $columns = $object->column_names;
-                        $this->info(collect($columns));
+                        $columns = $object->column_names;                     
+                        // $this->info(collect($columns));
                         
                         // $collection = collect();
                         // if (gettype($object) == 'object') {
@@ -71,6 +71,7 @@ class Prices extends Command
                         // }
                     } else {
                         $this->error($response->code);
+                        $this->error($commodity->name);
                     }
                 } catch (\Exception $e) {
                     $this->error($e);
