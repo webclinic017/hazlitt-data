@@ -30,10 +30,14 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'commodity' => [
+        'spot' => env('SPOT_URL'),
+    ],
+
     'quandl' => [
         'key' => env('QUANDL_API_KEY'),
         'url' => 'https://www.quandl.com/api/v3/datasets/'
-    ],
+    ],    
 
     'worldbank' => [
         'url' => 'https://api.worldbank.org/v2/country/'
