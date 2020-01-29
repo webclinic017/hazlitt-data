@@ -42,55 +42,26 @@ class SpotPrices extends Command
     public function handle()
     {
         $start = microtime(true);
-        $countries = Commodity::all();
+        $commodities = Commodity::all();
         $client = new Client();
+        try {
+            $crawler = $client->request('GET', env('SPOT_URL'));
 
-        foreach ($countries as $country) {
-            $pages = collect([
-                'inflation' => 'inflation-cpi',
-                'corporate_tax' => 'corporate-tax-rate',
-                'interest_rate' => 'interest-rate',
-                'unemployment_rate' => 'unemployment-rate',
-                'labor_force' => 'labor-force-participation-rate',
-                'income_tax' => 'personal-income-tax-rate',
-                'gdp' => 'gdp-per-capita',
-                'gov_debt_to_gdp' => 'government-debt-to-gdp',
-                'central_bank_balance_sheet' => 'central-bank-balance-sheet',
-                'budget' => 'government-budget-value'
-            ]);
-
-            $pages->each(function ($slug, $indicator) use ($country, $client) {
-                try {
-                    $this->comment('https://tradingeconomics.com/' . $country->slug .  '/' . $slug);
-                    $crawler = $client->request('GET', 'https://tradingeconomics.com/' . $country->slug .  '/' . $slug);
-
-                    $crawler->filter('body')->each(function ($node) use ($country, $indicator) {
-                        if (!isset($node)) {
-                            $this->error($country->name . ' ' . $indicator . ' indicator missing.');
-                            return;
-                        }
-
-                        if (
-                            $node->filter('#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)')->count() == 0
-                        ) {
-                            $this->error($country->name . ' ' . $indicator . ' indicator missing.');
-                            return;
-                        }
-
-                        $country = Country::query()
-                            ->whereName($country->name);
-
-                        $country->update([
-                            $indicator => $node->filter('#ctl00_ContentPlaceHolder1_ctl03_PanelDefinition td:nth-child(2)')->text()
-                        ]);
-                    });
-                    $this->info('Saved ' . $country->name . ' ' . $indicator);
-                } catch (\Exception $e) {
-                    $this->error($e);
-                    report($e);
+            $crawler->filter('body')->each(function ($node) {
+                if ($node->filter('td.datatable-item-first')->count() == 0) {
+                    $this->error('Bad selector');
+                    return;
                 }
+                dd($node->filter('td.datatable-item-first')->text());
+
             });
+            $this->info('Saved ' . $commodity->name . ' spot price');
+        } catch (\Exception $e) {
+            $this->error($e);
+            report($e);
         }
+            
+        
         $end = microtime(true);
         $time = number_format(($end - $start)/60);
         $this->info("\n" . 'Done: ' . $time . ' minutes');
