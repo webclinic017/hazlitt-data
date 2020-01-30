@@ -42,7 +42,6 @@ class SpotPrices extends Command
     public function handle()
     {
         $start = microtime(true);
-        $commodities = Commodity::all();
         $client = new Client();
         try {
             $crawler = $client->request('GET', env('SPOT_URL'));
@@ -52,10 +51,35 @@ class SpotPrices extends Command
                     $this->error('Bad selector');
                     return;
                 }
-                dd($node->filter('td.datatable-item-first')->text());
 
+                $node->filter('td.datatable-item-first')->each(function ($item) use ($node) {
+                    $this->comment('getting ' . $item->text() . '...');
+                    $price_change = '#nch';
+                    $day = '#pch';
+                    $week = '#aspnetForm > div.container > div > div.col-lg-8.col-md-9 > div > div:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(6)';
+                    $month = '#aspnetForm > div.container > div > div.col-lg-8.col-md-9 > div > div:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(7)';
+                    $year =  '#aspnetForm > div.container > div > div.col-lg-8.col-md-9 > div > div:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(8)';
+                    $spot = $node->filter('#p')->text();
+                    
+                    $change = collect([
+                        'price-change' => $node->filter($price_change)->text(),
+                        'day' => $node->filter($day)->text(),
+                        'weekly' => $node->filter($week)->text(),
+                        'monthly' => $node->filter($month)->text(),
+                        'yearly' => $node->filter($year)->text(),
+                    ]);
+                    
+                    $commodity = Commodity::where('name', '=', $item->text())->first();
+                    if (!$commodity) {
+                        return;
+                    }
+                    $commodity->spot = $spot;
+                    $commodity->change = $change;
+                    $commodity->save();
+                    $this->info($item->text() . ' prices saved.');
+                });
             });
-            $this->info('Saved ' . $commodity->name . ' spot price');
+            // $this->info('Saved ' . $commodity->name . ' spot price');
         } catch (\Exception $e) {
             $this->error($e);
             report($e);

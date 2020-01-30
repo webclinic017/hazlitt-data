@@ -19,7 +19,9 @@ class CreateCommoditiesTable extends Migration
             $table->string('slug');
             $table->json('snippets')
                 ->nullable();
-            $table->integer('spot')
+            $table->float('spot')
+                ->nullable();
+            $table->json('change')
                 ->nullable();
             $table->json('prices')
                 ->nullable();
@@ -27,9 +29,7 @@ class CreateCommoditiesTable extends Migration
                 ->nullable();
             $table->json('demand')
                 ->nullable();
-            $table->integer('all_time_high')
-                ->nullable();
-            $table->date('ath_date')
+            $table->json('all_time_high')
                 ->nullable();
             $table->json('applications')
                 ->nullable();
