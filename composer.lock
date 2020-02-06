@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e2638ecb21a556e7e358ab2229fdd3c4",
+    "content-hash": "d9f52ed8c42bfb857018270c4af430d3",
     "packages": [
         {
             "name": "artesaos/seotools",
@@ -71,6 +71,65 @@
                 "webmaster"
             ],
             "time": "2019-09-05T13:49:10+00:00"
+        },
+        {
+            "name": "digitonic/iex-cloud-sdk",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/digitonic/iex-cloud-sdk.git",
+                "reference": "e3802412a037c9c20738737385afd0bf7ea67ba0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/digitonic/iex-cloud-sdk/zipball/e3802412a037c9c20738737385afd0bf7ea67ba0",
+                "reference": "e3802412a037c9c20738737385afd0bf7ea67ba0",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.3",
+                "illuminate/support": "5.8.*|6.*",
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "3.8.*",
+                "phpunit/phpunit": "^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Digitonic\\IexCloudSdk\\IexCloudSdkServiceProvider"
+                    ],
+                    "aliases": {
+                        "IexCloudSdk": "Digitonic\\IexCloudSdk\\IexCloudSdkFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Digitonic\\IexCloudSdk\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Steven Richardson",
+                    "email": "steven@digitonic.co.uk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Unofficial PHP SDK for IEX Cloud API",
+            "homepage": "https://github.com/digitonic/iex-cloud-sdk",
+            "keywords": [
+                "digitonic",
+                "iex-cloud-sdk"
+            ],
+            "time": "2019-10-15T08:11:32+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
