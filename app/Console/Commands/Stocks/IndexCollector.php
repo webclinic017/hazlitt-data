@@ -11,7 +11,7 @@ class IndexCollector extends Command
      *
      * @var string
      */
-    protected $signature = 'stocks:indeces';
+    protected $signature = 'stocks:indices';
 
     /**
      * The console command description.
@@ -37,6 +37,30 @@ class IndexCollector extends Command
      */
     public function handle()
     {
-        //
+        $directory = 'storage/imports';
+
+        $files = array();
+        foreach (scandir($directory) as $file) {            
+            if ($file !== '.' && $file !== '..') {
+                // $files[] = $file;
+                // fgetcsv($file);
+                // $this->info($file);
+                if (($handle = fopen($directory . '/' . $file, "r")) !== FALSE) {
+                    $csv = fgetcsv($handle);
+                    dd($csv);
+                    // while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                    //     $num = count($data);
+                    //     echo "<p> $num fields in line $row: <br /></p>\n";
+                    //     $row++;
+                    //     for ($c=0; $c < $num; $c++) {
+                    //         echo $data[$c] . "<br />\n";
+                    //     }
+                    // }
+                    // fclose($handle);
+                }
+            }
+        }
+
+        dd($files);
     }
 }
