@@ -20,8 +20,8 @@ class CreateArticlesTable extends Migration
                 ->nullable();
             $table->string('item_type')
                 ->nullable();
-            $table->string('subject');
-            $table->string('topic');
+            $table->char('subject', 100);
+            $table->char('topic', 100);
             $table->string('source');
             $table->text('url');                
             $table->text('headline');

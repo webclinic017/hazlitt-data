@@ -14,6 +14,8 @@ class DatabaseSeeder extends Seeder
     {
         Registry::truncate();
         $this->call(CommodityTableSeeder::class);
-        $this->call(CountryTableSeeder::class);      
+        $this->call(CountryTableSeeder::class);
+        $this->call(IndexTableSeeder::class);
+        $this->call(StocksTableSeeder::class);
     }
 }

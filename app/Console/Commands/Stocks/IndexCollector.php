@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands\Stocks;
 
+use App\Stock;
+use App\Index;
+
 use Illuminate\Console\Command;
 
 class IndexCollector extends Command
@@ -38,29 +41,22 @@ class IndexCollector extends Command
     public function handle()
     {
         $directory = 'storage/imports';
+        $indices = Index::all();
 
-        $files = array();
-        foreach (scandir($directory) as $file) {            
-            if ($file !== '.' && $file !== '..') {
-                // $files[] = $file;
-                // fgetcsv($file);
-                // $this->info($file);
-                if (($handle = fopen($directory . '/' . $file, "r")) !== FALSE) {
-                    $csv = fgetcsv($handle);
-                    dd($csv);
-                    // while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                    //     $num = count($data);
-                    //     echo "<p> $num fields in line $row: <br /></p>\n";
-                    //     $row++;
-                    //     for ($c=0; $c < $num; $c++) {
-                    //         echo $data[$c] . "<br />\n";
-                    //     }
-                    // }
-                    // fclose($handle);
-                }
-            }
+        foreach ($indices as $index) {
+            // $row = 1;
+            // if (($handle = fopen($directory . '/' . $index->source, "r")) !== false) {
+            //     while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+            //         if ($data != null) {
+            //         $data = collect($data);
+            //         $stock = new Stock();
+            //         $stock->name = $data->first();
+            //         $stock->ticker = $data->last();
+            //         $stock->save();                                            
+            //         }                    
+            //     }
+            //     fclose($handle);
+            // }
         }
-
-        dd($files);
     }
 }

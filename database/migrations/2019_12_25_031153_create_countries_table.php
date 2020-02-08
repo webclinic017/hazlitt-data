@@ -15,8 +15,8 @@ class CreateCountriesTable extends Migration
     {
         Schema::create('countries', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('code');
+            $table->char('name', 100);
+            $table->char('code', 50);
             $table->string('slug');
             $table->json('snippets')
                 ->nullable();
