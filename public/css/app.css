@@ -11401,19 +11401,31 @@ video {
   z-index: auto;
 }
 
+.helvetica {
+  font-family: HelveticaNeue;
+}
+
 .gothic-neo {
   font-family: Apple SD Gothic Neo;
+}
+
+.gold {
+  color: #F2D024;
+}
+
+.bg-dark-mode-lightest {
+  background-color: #3d4852;
 }
 
 .bg-dark-mode {
   background-color: #212121;
 }
 
-.bg-dark-mode-lighter {
+.bg-dark-mode-light {
   background-color: #303030;
 }
 
-.bg-dark-mode-lightest {
+.bg-dark-mode-lighter {
   background-color: #424242;
 }
 
