@@ -4,6 +4,10 @@ namespace App\Console\Commands\Stocks;
 
 use App\Stock;
 use App\Index;
+use \Digitonic\IexCloudSdk\Facades\Stocks\AdvancedStats;
+use \Digitonic\IexCloudSdk\Facades\Stocks\BalanceSheet;
+use \Digitonic\IexCloudSdk\Facades\Stocks\Company;
+use \Digitonic\IexCloudSdk\Facades\Stocks\Price;
 
 use Illuminate\Console\Command;
 
@@ -40,23 +44,15 @@ class IndexCollector extends Command
      */
     public function handle()
     {
-        $directory = 'storage/imports';
-        $indices = Index::all();
+        $pubilc_key = env('services.iex.public');
+        // $stocks = Stocks::all();
+        $stock = "GOOG";
 
-        foreach ($indices as $index) {
-            // $row = 1;
-            // if (($handle = fopen($directory . '/' . $index->source, "r")) !== false) {
-            //     while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-            //         if ($data != null) {
-            //         $data = collect($data);
-            //         $stock = new Stock();
-            //         $stock->name = $data->first();
-            //         $stock->ticker = $data->last();
-            //         $stock->save();                                            
-            //         }                    
-            //     }
-            //     fclose($handle);
-            // }
-        }
+        $response = Company::setSymbol($stock)->get();
+        dd($response);
+
+        // foreach ($stocks as $stock) {
+
+        // }
     }
 }

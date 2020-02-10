@@ -37,7 +37,12 @@ return [
     'quandl' => [
         'key' => env('QUANDL_API_KEY'),
         'url' => 'https://www.quandl.com/api/v3/datasets/'
-    ],    
+    ],  
+    
+    'iex' => [
+        'public' => env('IEX_CLOUD_PUBLIC_KEY'),
+        'secret' => env('IEX_CLOUD_SECRET_KEY'),
+    ],  
 
     'worldbank' => [
         'url' => 'https://api.worldbank.org/v2/country/'
