@@ -13,14 +13,17 @@
 </head>
 
 <body class="bg-dark-mode">
-    {{-- @include('main.partials.header') --}}
-
-    @yield('content')
-
+    @include('partials.topbar')
+    <section class="main flex ml-8">
+        @include('partials.sidebar')
+        <div class="content w-5/6 bg-dark-mode-light rounded-l-lg shadow-inner-dark text-old-gray p-8">
+            @yield('content')
+        </div>
+    </section>
     {{-- @include('main.partials.footer') --}}
 
     @push('scripts')
-        <script src="{!! asset('js/app.js') !!}"></script>
+    <script src="{!! asset('js/app.js') !!}"></script>
     @endpush
     @stack('scripts')
 </body>
