@@ -22,9 +22,9 @@ class CreateStocksTable extends Migration
             $table->char('ticker', 25);
             $table->float('price')
                 ->nullable();
-            $table->json('financials')
+            $table->json('advanced_stats')
                 ->nullable();
-            $table->json('ratios')
+            $table->json('balance_sheet')
                 ->nullable();
             $table->json('company')
                 ->nullable();

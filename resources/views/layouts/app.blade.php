@@ -9,6 +9,7 @@
 
     {!! SEO::generate() !!}
     <link rel="stylesheet" type="text/css" href="{!! asset('css/app.css') !!}">
+    <link href="https://fonts.googleapis.com/css?family=Aldrich&display=swap" rel="stylesheet">
 </head>
 
 <body class="bg-dark-mode">

@@ -8,32 +8,20 @@
     font-family: HelveticaNeue;
 }
 
+.aldrich {
+    font-family: 'Aldrich', sans-serif;
+}
+
 .gothic-neo {
     font-family: Apple SD Gothic Neo;
-}
-
-.gold {
-    color: #F2D024;
-}
-
-.bg-dark-mode-lightest {
-    background-color: #3d4852;
-}
-
-.bg-dark-mode {
-    background-color: #212121;
-}
-
-.bg-dark-mode-light {
-    background-color: #303030;
-}
-
-.bg-dark-mode-lighter {
-    background-color: #424242;
 }
 
 .alternating-row {
     .row-item:nth-child(even) {
         background: #424242;
     }
+}
+
+.shadow-inner-dark {
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.6);
 }
