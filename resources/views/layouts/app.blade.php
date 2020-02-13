@@ -14,7 +14,7 @@
 
 <body class="bg-dark-mode">
     @include('partials.topbar')
-    <section class="main flex ml-8">
+    <section class="main flex mx-8">
         @include('partials.sidebar')
         <div class="content w-5/6 bg-dark-mode-light rounded-l-lg shadow-inner-dark text-old-gray p-8">
             @yield('content')
