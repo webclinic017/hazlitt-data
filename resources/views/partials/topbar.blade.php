@@ -2,7 +2,7 @@
     <div class="gothic-neo px-4 text-gold text-lg">
         <div class="logo inline-block">
             @svg('graph-blend-filled', 'text-lg align-middle inline-block')
-            <p class="align-middle inline-block aldrich text-2xl">Hazlitt Data</p>
+            <h1 class="align-middle inline-block aldrich text-3xl">Hazlitt Data</h1>
         </div>
     </div>
 </div>

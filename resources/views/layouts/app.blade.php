@@ -16,7 +16,7 @@
     @include('partials.topbar')
     <section class="main flex mx-8">
         @include('partials.sidebar')
-        <div class="content w-5/6 bg-dark-mode-light rounded-l-lg shadow-inner-dark text-old-gray p-8">
+        <div class="content w-full bg-dark-mode-light rounded-l-lg shadow-inner-dark text-old-gray py-6 px-8">
             @yield('content')
         </div>
     </section>
