@@ -11,6 +11,7 @@ module.exports = {
         'dark-mode-blue': '#3d4852',
         'off-white': '#e6e6e6',
         'off-gray': '#737373',
+        'dark-opacity': 'rgba(19,19,19,0.30);',
         'gray-darkest-alpha': 'rgba(56,56,56,.25);',        
       },
     }

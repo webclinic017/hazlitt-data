@@ -56,13 +56,11 @@ class Headlines extends Command
             Article::where('item_id', '=', $commodity->id)->where('item_type', '=', 'App\Commodity')->delete();
 
             $queries->each(function ($value, $query) use ($commodity, $client) {
-
                 try {
                     $this->comment("\n" . 'https://news.google.com/search?q=' . $value);
                     $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $value);
 
                     $crawler->filter('article')->each(function ($node) use ($commodity, $query) {
-
                         if (!isset($node)) {
                             $this->warn('No articles for ' . $commodity->name);
                             return;
@@ -75,10 +73,11 @@ class Headlines extends Command
                         ) {
                             return;
                         }
-
+                        
                         # Manually constructing article link from jslog attribute.
-                        $jslog = $node->filter('article a')->attr('jslog');
+                        $jslog = $node->filter('article')->attr('jslog');
                         $jslog_split = explode(";", $jslog);
+                        
                         $url_stripped = explode(":", $jslog_split[1], 2);
                         $article_url = $url_stripped[1];
 

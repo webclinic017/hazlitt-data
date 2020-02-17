@@ -32,7 +32,7 @@ class CommodityTableSeeder extends Seeder
             $entry->url              = 'commodities/' . $commodity->slug;
             $entry->destination      = 'Main\CommodityController@router';
             $entry->layout           = 'main.layouts.app';
-            $entry->view             = 'commodities.index';
+            $entry->view             = 'commodities.show';
             $entry->redirect         = false;
             $entry->code             = 200;
             $entry->meta_title       = $commodity->name . ' News and Prices';

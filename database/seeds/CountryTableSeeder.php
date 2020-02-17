@@ -30,7 +30,7 @@ class CountryTableSeeder extends Seeder
             $entry->url              = 'countries/' . $country->slug;
             $entry->destination      = 'Main\CountryController@router';
             $entry->layout           = 'main.layouts.app';
-            $entry->view             = 'countries.index';
+            $entry->view             = 'countries.show';
             $entry->redirect         = false;
             $entry->code             = 200;
             $entry->meta_title       = $country->name . ' News and Prices';
