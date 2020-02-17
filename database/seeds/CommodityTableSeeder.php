@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Commodity;
 use App\Registry;
+use Illuminate\Support\Facades\DB;
 
 class CommodityTableSeeder extends Seeder
 {
@@ -13,17 +14,25 @@ class CommodityTableSeeder extends Seeder
      */
     public function run()
     {
+        $commodities = Commodity::all();
+        foreach ($commodities as $commodity) {
+            DB::table('registry')
+            ->where('entry_type', '=', 'App\Commodity')
+            ->where('entry_id', '=', $commodity->id)
+            ->delete();
+        }
+        
         Commodity::truncate();
                 
         $commodities = new Commodity();
-        $commodity_codes = $commodities->codes();        
+        $commodity_codes = $commodities->codes();
 
-        $commodity_codes->each(function ($data, $type) {			
+        $commodity_codes->each(function ($data, $type) {
             $commodity = Commodity::create([
                 'name' => $type,
                 'slug' => strtolower(str_replace(' ', '-', $type)),
-				'code' => collect($data)->get('code'),
-				'source' => collect($data)->get('source'),
+                'code' => collect($data)->get('code'),
+                'source' => collect($data)->get('source'),
                 'status' => 1,
             ]);
 

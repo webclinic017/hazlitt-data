@@ -13,11 +13,19 @@ class CountryTableSeeder extends Seeder
      */
     public function run()
     {
+        $countries = Country::all();
+        foreach ($countries as $country) {
+            DB::table('registry')
+            ->where('entry_type', '=', 'App\Country')
+            ->where('entry_id', '=', $country->id)
+            ->delete();
+        }
+
         Country::truncate();
+        
         $country = new Country();
         $countries = $country->countries();
         $countries->each(function ($code, $name) {
-
             $country = Country::create([
                 'name' => $name,
                 'slug' => strtolower(str_replace(' ', '-', $name)),

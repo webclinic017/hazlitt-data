@@ -25,7 +25,15 @@ class CommodityController extends Controller
             ->whereId($commodity->id)
             ->select('commodities.*')
             ->with('registry')
-            ->with('articles')
+            ->with([
+                'articles' => function ($query) {
+                    $query
+                        ->select('articles.*')
+                        ->where('topic', '=', 'supply')
+                        ->orWhere('topic', '=', 'demand')
+                        ->orWhere('topic', '=', 'prices')->take(3);
+                }
+            ])
             ->first();            
             
         // $snippets = Arr::wrap($commodity->snippets->get(app()->getLocale()));

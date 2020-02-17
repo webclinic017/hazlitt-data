@@ -12,6 +12,7 @@
                 <a href="{!! $article->url !!}">
                     <p class="headline text-gray-100 text-xs w-full">
                         {!! $article->headline !!}
+                        {!! $article->topic !!}
                         {{-- @if (strlen($article->headline) > 95) 
                             ...
                         @endif --}}

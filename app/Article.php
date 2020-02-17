@@ -19,6 +19,11 @@ class Article extends Model
     'release_date',
     ];
 
+    public function scopeSorted($query)
+    {
+        return $query->where('articles.topic', '=', 1);
+    }
+
     public function item()
     {
         return $this->morphTo();
