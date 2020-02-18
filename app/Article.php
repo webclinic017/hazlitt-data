@@ -5,7 +5,6 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-
 class Article extends Model
 {
     protected $fillable = [
@@ -17,12 +16,7 @@ class Article extends Model
     'subject',
     'topic',
     'release_date',
-    ];
-
-    public function scopeSorted($query)
-    {
-        return $query->where('articles.topic', '=', 1);
-    }
+    ];    
 
     public function item()
     {

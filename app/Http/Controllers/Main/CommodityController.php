@@ -8,6 +8,7 @@ use App\Commodity;
 use App\Registry;
 use App\Article;
 use Artesaos\SEOTools\Traits\SEOTools as SEOToolsTrait;
+
 // use Laracasts\Utilities\JavaScript\JavaScriptFacade as Javascript;
 // use Illuminate\Support\Arr;
 
@@ -29,12 +30,14 @@ class CommodityController extends Controller
                 'articles' => function ($query) {
                     $query
                         ->select('articles.*')
-                        ->where('topic', '=', 'supply')
-                        ->orWhere('topic', '=', 'demand')
-                        ->orWhere('topic', '=', 'prices')->take(3);
+                        ->where('topic', '=', 'supply')->take(33);
+                        $query
+                        ->select('articles.*')
+                        ->where('topic', '=', 'supply')->take(33);                      
                 }
             ])
-            ->first();            
+            ->first();
+            dd($commodity->articles);
             
         // $snippets = Arr::wrap($commodity->snippets->get(app()->getLocale()));
         //     foreach ($snippets as $key => $value) {
