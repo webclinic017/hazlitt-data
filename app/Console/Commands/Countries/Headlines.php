@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Console\Commands\Countries;
+namespace App\Console\Commands\Commodities;
 
-use Illuminate\Console\Command;
 use App\Article;
 use App\Country;
 use Illuminate\Support\Carbon;
 use Goutte\Client;
+use Illuminate\Support\Arr;
+
+use Illuminate\Console\Command;
 
 class Headlines extends Command
 {
@@ -22,7 +24,7 @@ class Headlines extends Command
      *
      * @var string
      */
-    protected $description = 'Scrape news articles about each country';
+    protected $description = 'Scrape trending country headlines from Google News';
 
     /**
      * Create a new command instance.
@@ -46,21 +48,17 @@ class Headlines extends Command
 
         foreach ($countries as $country) {
             $client = new Client();
-            $queries = collect([
-                'economy' => strtolower(str_replace(' ', '+', $country->name)) . '+economy',
-                'interest-rates' => strtolower(str_replace(' ', '+', $country->name)) . '+interest+rates',
-            ]);
+            $topics = collect(Country::$topics);
 
             Article::where('item_id', '=', $country->id)->where('item_type', '=', 'App\Country')->delete();
 
-            $queries->each(function ($value, $query) use ($country, $client) {
-
+            $topics->each(function ($topic) use ($country, $client) {
+                $query = strtolower(str_replace(' ', '+', $country->name)) . '+' . $topic;
                 try {
-                    $this->comment("\n" . 'https://news.google.com/search?q=' . $value);
-                    $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $value);
+                    $this->comment("\n" . 'https://news.google.com/search?q=' . $query);
+                    $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $query);
 
-                    $crawler->filter('article')->each(function ($node) use ($query, $country) {
-
+                    $crawler->filter('article')->each(function ($node) use ($country, $topic) {
                         if (!isset($node)) {
                             $this->warn('No articles for ' . $country->name);
                             return;
@@ -73,12 +71,14 @@ class Headlines extends Command
                         ) {
                             return;
                         }
-
+                        
                         # Manually constructing article link from jslog attribute.
-                        $jslog = $node->filter('article a')->attr('jslog');
+                        $jslog = $node->filter('article')->attr('jslog');
                         $jslog_split = explode(";", $jslog);
+                        
                         $url_stripped = explode(":", $jslog_split[1], 2);
                         $article_url = $url_stripped[1];
+
                         if (Article::where('url', '=', $article_url)->count() != 0) {
                             $this->warn('Duplicate article');
                             return;
@@ -94,7 +94,7 @@ class Headlines extends Command
                         $article->url           = $article_url;
                         $article->source        = $node->filter('a.wEwyrc')->text();
                         $article->subject       = $country->name;
-                        $article->topic         = $query;
+                        $article->topic         = $topic;
                         $article->release_date  = $release_date;
 
                         $article->save();

@@ -6,6 +6,7 @@ use App\Article;
 use App\Commodity;
 use Illuminate\Support\Carbon;
 use Goutte\Client;
+use Illuminate\Support\Arr;
 
 use Illuminate\Console\Command;
 
@@ -47,20 +48,17 @@ class Headlines extends Command
 
         foreach ($commodities as $commodity) {
             $client = new Client();
-            $queries = collect([
-                'prices' => strtolower(str_replace(' ', '+', $commodity->name)) . '+prices',
-                'supply' => strtolower(str_replace(' ', '+', $commodity->name)) . '+supply',
-                'demand' => strtolower(str_replace(' ', '+', $commodity->name)) . '+demand'
-            ]);
+            $topics = collect(Commodity::$topics);
 
             Article::where('item_id', '=', $commodity->id)->where('item_type', '=', 'App\Commodity')->delete();
 
-            $queries->each(function ($value, $query) use ($commodity, $client) {
+            $topics->each(function ($topic) use ($commodity, $client) {
+                $query = strtolower(str_replace(' ', '+', $commodity->name)) . '+' . $topic;
                 try {
-                    $this->comment("\n" . 'https://news.google.com/search?q=' . $value);
-                    $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $value);
+                    $this->comment("\n" . 'https://news.google.com/search?q=' . $query);
+                    $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $query);
 
-                    $crawler->filter('article')->each(function ($node) use ($commodity, $query) {
+                    $crawler->filter('article')->each(function ($node) use ($commodity, $topic) {
                         if (!isset($node)) {
                             $this->warn('No articles for ' . $commodity->name);
                             return;
@@ -96,7 +94,7 @@ class Headlines extends Command
                         $article->url           = $article_url;
                         $article->source        = $node->filter('a.wEwyrc')->text();
                         $article->subject       = $commodity->name;
-                        $article->topic         = $query;
+                        $article->topic         = $topic;
                         $article->release_date  = $release_date;
 
                         $article->save();

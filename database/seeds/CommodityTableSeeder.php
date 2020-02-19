@@ -22,10 +22,8 @@ class CommodityTableSeeder extends Seeder
             ->delete();
         }
         
-        Commodity::truncate();
-                
-        $commodities = new Commodity();
-        $commodity_codes = $commodities->codes();
+        Commodity::truncate();            
+        $commodity_codes = collect(Commodity::$codes);
 
         $commodity_codes->each(function ($data, $type) {
             $commodity = Commodity::create([

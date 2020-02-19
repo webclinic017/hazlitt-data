@@ -23,8 +23,7 @@ class CountryTableSeeder extends Seeder
 
         Country::truncate();
         
-        $country = new Country();
-        $countries = $country->countries();
+        $countries = Country::$countries;
         $countries->each(function ($code, $name) {
             $country = Country::create([
                 'name' => $name,

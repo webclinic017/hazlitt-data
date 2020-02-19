@@ -26,18 +26,13 @@ class CommodityController extends Controller
             ->whereId($commodity->id)
             ->select('commodities.*')
             ->with('registry')
-            ->with([
-                'articles' => function ($query) {
-                    $query
-                        ->select('articles.*')
-                        ->where('topic', '=', 'supply')->take(33);
-                        $query
-                        ->select('articles.*')
-                        ->where('topic', '=', 'supply')->take(33);                      
-                }
-            ])
+            ->with('articles')
             ->first();
-            dd($commodity->articles);
+
+        // $prices_articles = $commodity->articles->where('topic', '=', 'prices');
+        // $supply_articles = $commodity->articles->where('topic', '=', 'supply');
+        // $demand_articles = $commodity->articles->where('topic', '=', 'demand');
+
             
         // $snippets = Arr::wrap($commodity->snippets->get(app()->getLocale()));
         //     foreach ($snippets as $key => $value) {
