@@ -26,7 +26,13 @@ class CommodityController extends Controller
             ->whereId($commodity->id)
             ->select('commodities.*')
             ->with('registry')
-            ->with('articles')
+            ->with(['articles' => function ($query) {
+                $query
+                    ->select('articles.*')
+                    ->orderBy('ranking', 'asc')
+                    ->take(150);               
+                }
+            ])            
             ->first();
 
             
