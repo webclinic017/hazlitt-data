@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Commodities;
+namespace App\Console\Commands\Countries;
 
 use App\Article;
 use App\Country;
@@ -50,7 +50,9 @@ class Headlines extends Command
             $client = new Client();
             $topics = collect(Country::$topics);
 
-            Article::where('item_id', '=', $country->id)->where('item_type', '=', 'App\Country')->delete();
+            Article::where('item_id', '=', $country->id)
+                ->where('item_type', '=', 'App\Country')
+                ->delete();
 
             $topics->each(function ($topic) use ($country, $client) {
                 $query = strtolower(str_replace(' ', '+', $country->name)) . '+' . $topic;
@@ -58,7 +60,7 @@ class Headlines extends Command
                     $this->comment("\n" . 'https://news.google.com/search?q=' . $query);
                     $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $query);
 
-                    $crawler->filter('article')->each(function ($node) use ($country, $topic) {
+                    $crawler->filter('article')->each(function ($node, $ranking) use ($country, $topic) {
                         if (!isset($node)) {
                             $this->warn('No articles for ' . $country->name);
                             return;
@@ -87,15 +89,15 @@ class Headlines extends Command
                         # Removing Google's random Z from timestamp
                         $timestamp = $node->filter('time')->attr('datetime');
                         $date_split = explode('Z', $timestamp);
-                        $release_date = $date_split[0];
+                        $published = $date_split[0];
 
                         $article = new Article();
                         $article->headline      = $node->filter('h3 > a')->text();
                         $article->url           = $article_url;
                         $article->source        = $node->filter('a.wEwyrc')->text();
-                        $article->subject       = $country->name;
                         $article->topic         = $topic;
-                        $article->release_date  = $release_date;
+                        $article->ranking       = $ranking;
+                        $article->published     = $published;
 
                         $article->save();
                         $country->articles()

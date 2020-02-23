@@ -29,10 +29,6 @@ class CommodityController extends Controller
             ->with('articles')
             ->first();
 
-        // $prices_articles = $commodity->articles->where('topic', '=', 'prices');
-        // $supply_articles = $commodity->articles->where('topic', '=', 'supply');
-        // $demand_articles = $commodity->articles->where('topic', '=', 'demand');
-
             
         // $snippets = Arr::wrap($commodity->snippets->get(app()->getLocale()));
         //     foreach ($snippets as $key => $value) {

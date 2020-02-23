@@ -15,7 +15,7 @@ class Article extends Model
     'headline',
     'subject',
     'topic',
-    'release_date',
+    'published',
     ];    
 
     public function item()

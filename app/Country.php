@@ -53,9 +53,8 @@ class Country extends Model
     }
 
     public static $topics = [
-        'prices',
-        'supply',
-        'demand'
+        'interest-rates',
+        'economy',
     ];
 
   

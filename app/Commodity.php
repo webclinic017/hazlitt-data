@@ -35,16 +35,6 @@ class Commodity extends Model
         return $this->morphOne('App\Registry', 'entry');
     }
 
-    //Queries for headlines
-    // public static function queries()
-    // {
-    //     return collect([
-    //         'prices' => strtolower(str_replace(' ', '+', $this->name)) . '+prices',
-    //         'supply' => strtolower(str_replace(' ', '+', $this->name)) . '+supply',
-    //         'demand' => strtolower(str_replace(' ', '+', $this->name)) . '+demand',
-    //     ]);
-    // }
-
     public static $topics = [
         'prices',
         'supply',
