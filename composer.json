@@ -13,6 +13,7 @@
         "digitonic/iex-cloud-sdk": "^0.1.0",
         "fabpot/goutte": "^4.0",
         "fideloper/proxy": "^4.0",
+        "guzzlehttp/guzzle": "^6.5",
         "htmlmin/htmlmin": "^6.0",
         "laracasts/utilities": "^3.0",
         "laravel/framework": "^6.2",

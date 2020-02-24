@@ -26,12 +26,11 @@ class CountryController extends Controller
             ->whereId($country->id)
             ->select('countries.*')
             ->with('registry')
-            ->with([
-                'articles' => function ($query) {
-                    $query
-                        ->select('articles.*')
-                        ->where('topic', '=', 'economy')->take(33)
-                        ->orWhere('topic', '=', 'interest-rates')->take(33);                        
+            ->with(['articles' => function ($query) {
+                $query
+                    ->select('articles.*')
+                    ->orderBy('ranking', 'asc')
+                    ->take(150);               
                 }
             ])
             ->first();
