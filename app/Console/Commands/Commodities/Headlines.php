@@ -5,8 +5,10 @@ namespace App\Console\Commands\Commodities;
 use App\Article;
 use App\Commodity;
 use Illuminate\Support\Carbon;
-use Goutte\Client;
 use Illuminate\Support\Arr;
+// use GuzzleHttp\Client;
+use Goutte\Client;
+use Symfony\Component\DomCrawler\Crawler;
 
 use Illuminate\Console\Command;
 
@@ -49,6 +51,7 @@ class Headlines extends Command
         foreach ($commodities as $commodity) {
             $client = new Client();
             $topics = collect(Commodity::$topics);
+
             Article::where('item_id', '=', $commodity->id)
                 ->where('item_type', '=', 'App\Commodity')
                 ->delete();
@@ -84,12 +87,12 @@ class Headlines extends Command
                             $this->warn('Duplicate article');
                             return;
                         }
-                        
+
                         # Removing Google's random Z from timestamp
                         $timestamp = $node->filter('time')->attr('datetime');
                         $date_split = explode('Z', $timestamp);
                         $published = $date_split[0];
-                        
+
                         $article = new Article();
                         $article->headline      = $node->filter('h3 > a')->text();
                         $article->url           = $article_url;
