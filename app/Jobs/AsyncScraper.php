@@ -13,6 +13,7 @@ use GuzzleHttp\Client;
 use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Support\Arr;
 use App\Article;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 class AsyncScraper implements ShouldQueue
 {
@@ -27,12 +28,14 @@ class AsyncScraper implements ShouldQueue
      */
 
     protected $_item;
-    protected $_topic;
+    protected $_topics;
+    protected $_type;
 
-    public function __construct($item, $topic)
+    public function __construct($item, $topics, $type)
     {
         $this->_item = $item;
-        $this->_topic = $topic;
+        $this->_topics = $topics;
+        $this->_type = $type;
     }
 
     /**
@@ -42,57 +45,74 @@ class AsyncScraper implements ShouldQueue
      */
     public function handle()
     {
-        $client = new Client();
+        $client = new Client();        
         $item = $this->_item;
-        $topic = $this->_topic;
-        $query = strtolower(str_replace(' ', '+', $item->name)) . '+' . $topic;
-        print 'https://news.google.com/search?q=' . $query;
-        $promise = $client->requestAsync('GET', 'https://news.google.com/search?q=' . $query);
-        $promise->then(function ($response) use ($item, $topic) {
-            $body = $response->getBody()->getContents();
+        $topics = $this->_topics;
+        $type = $this->_type;
+        // // $output = new OutputFormatterStyle();
+        
 
-            $crawler = new Crawler($body);
-            $crawler->filter('article')->each(function ($node, $ranking) use ($item, $topic) {
-                if (!isset($node)) {
-                    return;
-                }
-                if (
-                $node->filter('article > h3 > a')->count() == 0 ||
-                $node->filter('a.wEwyrc')->count() == 0 ||
-                $node->filter('time')->count() == 0 ||
-                $node->filter('article a')->count() == 0
-            ) {
-                    return;
-                }
+        foreach ($topics as $topic) {
+            $query = strtolower(str_replace(' ', '+', $item->name)) . '+' . $topic;            
+            // $output->writeln("<comment>\n" . 'https://news.google.com/search?q=' . $query . "<comment>");
+
+            $promise = $client->requestAsync('GET', 'https://news.google.com/search?q=' . $query);
+            $promise->then(function ($response) use ($item, $topic, $type) {
+                $body = $response->getBody()->getContents();
+
+                $crawler = new Crawler($body);
+                $crawler->filter('article')->each(function ($node, $ranking) use ($item, $topic, $type) {
+                    if (!isset($node)) {
+                        // $output->writeln('<warn>No articles</warn>');
+                        return;
+                    }
+                    if (
+                        $node->filter('article > h3 > a')->count() == 0 ||
+                        $node->filter('a.wEwyrc')->count() == 0 ||
+                        $node->filter('time')->count() == 0 ||
+                        $node->filter('article a')->count() == 0
+                    ) {
+                        return;
+                    }
+                    
+                    # Manually constructing article link from jslog attribute.
+                    $jslog = $node->filter('article')->attr('jslog');
+                    $jslog_split = explode(";", $jslog);
+                    
+                    $url_stripped = explode(":", $jslog_split[1], 2);
+                    $article_url = $url_stripped[1];
+
+                    //Remove duplicates
+                    $duplicate = Article::where('item_id', '=', $item->id)
+                        ->where('item_type', '=', $type)
+                        ->where('url', '=', $article_url)
+                        ->count();
+                    if ($duplicate != 0) {                        
+                        // $output->writeln('<warn>Duplicate article</warn>');
+                        return;
+                    }
+
+                    # Removing Google's random Z from timestamp
+                    $timestamp = $node->filter('time')->attr('datetime');
+                    $date_split = explode('Z', $timestamp);
+                    $published = $date_split[0];
+                
+
+                    $article = new Article();
+                    $article->headline      = $node->filter('h3 > a')->text();
+                    $article->url           = $article_url;
+                    $article->source        = $node->filter('a.wEwyrc')->text();
+                    $article->topic         = $topic;
+                    $article->ranking       = $ranking;
+                    $article->published     = $published;
+
+                    $article->save();
+                    $item->articles()
+                        ->save($article);
                         
-                # Manually constructing article link from jslog attribute.
-                $jslog = $node->filter('article')->attr('jslog');
-                $jslog_split = explode(";", $jslog);
-                        
-                $url_stripped = explode(":", $jslog_split[1], 2);
-                $article_url = $url_stripped[1];
-
-                if (Article::where('url', '=', $article_url)->count() != 0) {
-                    return;
-                }
-
-                # Removing Google's random Z from timestamp
-                $timestamp = $node->filter('time')->attr('datetime');
-                $date_split = explode('Z', $timestamp);
-                $published = $date_split[0];
-
-                $article = new Article();
-                $article->headline      = $node->filter('h3 > a')->text();
-                $article->url           = $article_url;
-                $article->source        = $node->filter('a.wEwyrc')->text();
-                $article->topic         = $topic;
-                $article->ranking       = $ranking;
-                $article->published     = $published;
-
-                $article->save();
-                $item->articles()
-                ->save($article);
-            });
-        })->wait();
+                    // $output->writeln('<info>'. $item->name . ' - ' . $article->source . ' saving article to database' . '</info>');
+                });
+            })->wait();
+        }
     }
 }

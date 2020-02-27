@@ -5,9 +5,9 @@ namespace App\Console\Commands\Commodities;
 use App\Article;
 use App\Commodity;
 use Illuminate\Support\Carbon;
+// use Goutte\Client;
+use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
-// use GuzzleHttp\Client;
-use Goutte\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
 use Illuminate\Console\Command;
@@ -50,18 +50,21 @@ class Headlines extends Command
 
         foreach ($commodities as $commodity) {
             $client = new Client();
-            $topics = collect(Commodity::$topics);
+            $topics = Commodity::$topics;
 
             Article::where('item_id', '=', $commodity->id)
                 ->where('item_type', '=', 'App\Commodity')
                 ->delete();
 
-            $topics->each(function ($topic) use ($commodity, $client) {
+            foreach ($topics as $topic) {
                 $query = strtolower(str_replace(' ', '+', $commodity->name)) . '+' . $topic;
-                try {
-                    $this->comment("\n" . 'https://news.google.com/search?q=' . $query);
-                    $crawler = $client->request('GET', 'https://news.google.com/search?q=' . $query);
+                $this->comment("\n" . 'https://news.google.com/search?q=' . $query);
 
+                $promise = $client->requestAsync('GET', 'https://news.google.com/search?q=' . $query);
+                $promise->then(function ($response) use ($commodity, $topic) {
+                    $body = $response->getBody()->getContents();
+
+                    $crawler = new Crawler($body);
                     $crawler->filter('article')->each(function ($node, $ranking) use ($commodity, $topic) {
                         if (!isset($node)) {
                             $this->warn('No articles for ' . $commodity->name);
@@ -83,7 +86,11 @@ class Headlines extends Command
                         $url_stripped = explode(":", $jslog_split[1], 2);
                         $article_url = $url_stripped[1];
 
-                        if (Article::where('url', '=', $article_url)->count() != 0) {
+                        $duplicate = Article::where('item_id', '=', $commodity->id)
+                            ->where('item_type', '=', 'App\Commodity')
+                            ->where('url', '=', $article_url)
+                            ->count();                            
+                        if ($duplicate != 0) {
                             $this->warn('Duplicate article');
                             return;
                         }
@@ -107,14 +114,11 @@ class Headlines extends Command
 
                         $this->info($commodity->name . ' - ' . $article->source . ' saving article to database');
                     });
-                } catch (\Exception $e) {
-                    $this->error($e);
-                    report($e);
-                }
-            });
+                })->wait();
+            }
         }
         $end = microtime(true);
-        $time = number_format(($end - $start) / 60);
-        $this->info("\n" . 'Done: ' . $time . ' minutes');
+        $time = number_format($end - $start);
+        $this->info("\n" . 'Done: ' . $time . ' seconds');
     }
 }

@@ -55,6 +55,7 @@ class Country extends Model
     public static $topics = [
         'interest-rates',
         'economy',
+        'culture'
     ];
 
   

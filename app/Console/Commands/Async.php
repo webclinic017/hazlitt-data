@@ -50,52 +50,22 @@ class Async extends Command
     {
         $start = microtime(true);
         $commodities = Commodity::all();
-        $pool = Pool::create();
 
         foreach ($commodities as $commodity) {
-            $pool->add(function () use ($commodity) {
-                $client = new Client();
-                $topics = Commodity::$topics;
-                Article::where('item_id', '=', $commodity->id)
+            $client = new Client();
+            $topics = Commodity::$topics;
+            $type = 'App\Commodity';
+
+            Article::where('item_id', '=', $commodity->id)
                 ->where('item_type', '=', 'App\Commodity')
                 ->delete();
 
-                foreach ($topics as $topic) {
-                    $query = strtolower(str_replace(' ', '+', $commodity->name)) . '+' . $topic;
-                    AsyncScraper::dispatch($commodity, $topic);
-                    print 'https://news.google.com/search?q=' . $query;
-                }
-            })->then(function ($output) {
-                // Handle success
-            })->catch(function (Throwable $exception) {
-                // Handle exception
-            });
+            AsyncScraper::dispatch($commodity, $topics, $type);
+            $this->info($commodity->name . ' articles saved article to database');
+            
         }
-
-        $pool->wait();
         $end = microtime(true);
-        $time = number_format(($end - $start) / 60);
-        $this->info("\n" . 'Done: ' . $time . ' minutes');
-
-
-        // $start = microtime(true);
-        // $commodities = Commodity::all();
-
-        // foreach ($commodities as $commodity) {
-        //     $client = new Client();
-        //     $topics = Commodity::$topics;
-        //     Article::where('item_id', '=', $commodity->id)
-        //         ->where('item_type', '=', 'App\Commodity')
-        //         ->delete();
-
-        //     foreach ($topics as $topic) {
-        //         $query = strtolower(str_replace(' ', '+', $commodity->name)) . '+' . $topic;
-        //         AsyncScraper::dispatch($commodity, $topic);
-        //         $this->info('https://news.google.com/search?q=' . $query);
-        //     }
-        // }
-        // $end = microtime(true);
-        // $time = number_format(($end - $start) / 60);
-        // $this->info("\n" . 'Done: ' . $time . ' minutes');
+        $time = number_format($end - $start);
+        $this->info("\n" . 'Done: ' . $time . ' seconds');
     }
 }
