@@ -12258,8 +12258,26 @@ video {
 }
 
 .sidebar-icon {
-  fill: #F2D024;
-  color: #F2D024;
+  fill: #f2d024;
+  color: #f2d024;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  background-color: black;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #dae1e7;
+  border-radius: 5px;
+}
+
+.item-news {
+  height: 80vh;
+}
+
+.item-news .row-item p.headline {
+  text-overflow: ellipsis;
 }
 
 @media (min-width: 640px) {

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Commodity;
 use App\Registry;
 use App\Article;
+use Illuminate\Support\Carbon;
 use Artesaos\SEOTools\Traits\SEOTools as SEOToolsTrait;
 
 // use Laracasts\Utilities\JavaScript\JavaScriptFacade as Javascript;
@@ -35,7 +36,7 @@ class CommodityController extends Controller
             ])            
             ->first();
 
-            
+        $carbon = new Carbon();
         // $snippets = Arr::wrap($commodity->snippets->get(app()->getLocale()));
         //     foreach ($snippets as $key => $value) {
         //         $commodity->snippets->set(app()->getLocale() . '.' . $key, view(['template' => $value, 'secondsTemplateCacheExpires' => 0], ['entry' => $entry, 'commodity' => $commodity])->render());
@@ -55,6 +56,7 @@ class CommodityController extends Controller
 
         return view($entry->view)
             ->with('entry', $entry)
-            ->with('commodity', $commodity);
+            ->with('commodity', $commodity)
+            ->with('carbon', $carbon);
     }
 }
