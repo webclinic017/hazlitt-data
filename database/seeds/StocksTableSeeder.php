@@ -14,7 +14,7 @@ class StocksTableSeeder extends Seeder
     public function run()
     {
         Stock::truncate();
-        $directory = 'storage/imports';
+        $directory = 'storage/imports/stock';
         $indices = Index::all();
 
         foreach ($indices as $index) {

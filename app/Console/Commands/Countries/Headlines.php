@@ -98,7 +98,11 @@ class Headlines extends Command
                         # Removing Google's random Z from timestamp
                         $timestamp = $node->filter('time')->attr('datetime');
                         $date_split = explode('Z', $timestamp);
-                        $published = $date_split[0];
+                        $date_string = $date_split[0];
+
+                        # Removing random T from timestamp
+                        $time_split = explode("T", $date_string);
+                        $published = implode(" ", $time_split);
 
                         $article = new Article();
                         $article->headline      = $node->filter('h3 > a')->text();
