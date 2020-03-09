@@ -43,16 +43,16 @@ class HistoricalPrices extends Command
      */
     public function handle()
     {
-        $start = microtime(true);
-        $commodities = Commodity::where('source', '=', 'quandl')->get();
+        $start = microtime(true);        
+        $commodities = Commodity::whereJsonLength('sources->quandl', 1)->get();
         
         $url = config('services.quandl.url');
         $api_key = config('services.quandl.key');
 
         foreach ($commodities as $commodity) {
             try {                
-                $this->comment($commodity->name . " - " . $url . $commodity->code . '?api_key=' . $api_key);
-                $response = Request::get($url . $commodity->code . '?api_key=' . $api_key);
+                $this->comment($commodity->name . " - " . $url . $commodity->sources['quandl'] . '?api_key=' . $api_key);
+                $response = Request::get($url . $commodity->sources['quandl'] . '?api_key=' . $api_key);
                 if ($response->code == 200) {
                     $object = last($response->body);
                     $columns = collect($object->column_names);

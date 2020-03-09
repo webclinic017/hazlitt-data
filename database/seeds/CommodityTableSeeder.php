@@ -32,7 +32,7 @@ class CommodityTableSeeder extends Seeder
                     'name' => $data[0],
                     'slug' => strtolower(str_replace(' ', '-', $data[0])),
                     'code' => $data[1],
-                    'source' => $data[2],
+                    'sources' => [ $data[2] => $data[1],],
                     'status' => 1,
                 ]);
 
