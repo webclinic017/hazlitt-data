@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Commodities;
+namespace App\Console\Commands\Commodities\SupplyDemand;
 
 use Illuminate\Console\Command;
 

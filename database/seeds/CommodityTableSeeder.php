@@ -22,17 +22,22 @@ class CommodityTableSeeder extends Seeder
             ->delete();
         }
         
-        Commodity::truncate();  
+        Commodity::truncate();
         $directory = 'storage/imports/commodity';
 
         $row = 1;
         if (($handle = fopen($directory . '/Commodities.csv', "r")) !== false) {
             while (($data = fgetcsv($handle, 0, ",")) !== false) {
+                $sources = explode('=>', $data[2]);
+                
+                $src = reset($sources);
+                $code = end($sources);
+
                 $commodity = Commodity::create([
                     'name' => $data[0],
                     'slug' => strtolower(str_replace(' ', '-', $data[0])),
-                    'code' => $data[1],
-                    'sources' => [ $data[2] => $data[1],],
+                    'sector' => $data[1],
+                    'sources' => [ $src => $code,],
                     'status' => 1,
                 ]);
 

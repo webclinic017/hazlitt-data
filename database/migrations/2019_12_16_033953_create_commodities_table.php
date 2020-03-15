@@ -31,6 +31,8 @@ class CreateCommoditiesTable extends Migration
                 ->nullable();
             $table->json('sources')
                 ->nullable();
+            $table->char('sector', 50)
+                ->nullable();
             $table->tinyInteger('status')
                 ->default(0);
             $table->timestamps();

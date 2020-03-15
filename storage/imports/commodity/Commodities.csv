@@ -1,89 +1,89 @@
-﻿Aluminum,ODA/PALUM_USD,quandl
-Antimony,,
-Bananas,ODA/PBANSOP_USD,quandl
-Barley,ODA/PBARL_USD,quandl
-Bauxite,,
-Bismuth,,
-Bitumen,,
-Butter,,
-Brent,CHRIS/ICE_B1,quandl
-Cadmium,,
-Cheese,,
-Chromium,,
-Coal,ODA/PCOALAU_USD,quandl
-Cobalt,,
-Cocoa,CHRIS/ICE_CC1,quandl
-Coffee,CHRIS/ICE_KC1,quandl
-Copper,ODA/PCOPP_USD,quandl
-Corn,CHRIS/CME_C1,quandl
-Cotton,CHRIS/ICE_CT1,quandl
-Crude Oil,CHRIS/CME_CL1,quandl
-Diamonds,,
-Eggs,,
-Electric Power,,
-Ethanol,,
-Fish,ODA/PFISH_USD,quandl
-Flaxseed,,
-Linseed Oil,,
-Fruits,,
-Gasoline,CHRIS/CME_RB1,quandl
-Gold,CHRIS/CME_GC1,quandl
-Grain Sorghum,,
-Hides,ODA/PHIDE_USD,quandl
-Leather,,
-Honey,,
-Iridium,JOHNMATT/IRID,quandl
-Iron Ore,ODA/PIORECR_USD,quandl
-Lard,ODA/PLAMB_USD,quandl
-Lead,ODA/PLEAD_USD,quandl
-Lean Hogs,CHRIS/CME_LN1,quandl
-Live Cattle,ODA/PBEEF_USD,quandl
-Lithium,,
-Lumber,CHRIS/CME_LB1,quandl
-Magnesium,,
-Manganese,,
-Mercury,,
-Milk,CHRIS/CME_DA1,quandl
-Molybdenum,,
-Neodymium,,
-Nickel,ODA/PNICK_USD,quandl
-Oat,CHRIS/CME_O1,quandl
-Olive Oil,ODA/POLVOIL_USD,quandl
-Onions,,
-Oranges,ODA/PORANG_USD,quandl
-Orange Juice,CHRIS/ICE_OJ1,quandl
-Palladium,CHRIS/CME_PA1,quandl
-Palm Oil,ODA/PPOIL_USD,quandl
-Peanuts,ODA/PGNUTS_USD,quandl
-Petroleum,,
-Plastics,,
-Platinum,CHRIS/CME_PL1,quandl
-Potatoes,,
-Poultry,ODA/PPOULT_USD,quandl
-Rapeseed Oil,ODA/PROIL_USD,quandl
-Rhodium,JOHNMATT/RHOD,quandl
-Rice,CHRIS/CME_RR1,quandl
-Ruthenium,JOHNMATT/RUTH,quandl
-Rubber,ODA/PRUBB_USD,quandl
-Salt,,
-Salmon,ODA/PSALM_USD,quandl
-Shrimp,ODA/PSHRI_USD,quandl
-Silk,,
-Silver,CHRIS/CME_SI1,quandl
-Soybeans,CHRIS/CME_S1,quandl
-Soybean Oil,CHRIS/CME_BO1,quandl
-Steel,SHFE/RBV2013,quandl
-Sugar,CHRIS/ICE_SB1,quandl
-Sulfur,,
-Tallow,,
-Tea,ODA/PTEA_USD,quandl
-Tin,ODA/PTIN_USD,quandl
-Titanium,,
-Tobacco,,
-Tungsten,,
-Turkeys,,
-Uranium,,
-Vanadium,,
-Wheat,CHRIS/CME_W1,quandl
-Wool,ODA/PWOOLC_USD,quandl
-Zinc,ODA/PZINC_USD,quandl
+﻿Aluminum,Industrial,quandl=>ODA/PALUM_USD
+Antimony,Industrial,
+Bananas,Agricultural,quandl=>ODA/PBANSOP_USD
+Barley,Agricultural,quandl=>ODA/PBARL_USD
+Bauxite,Industrial,
+Bismuth,Industrial,
+Bitumen,Industrial,
+Butter,Agricultural,
+Brent,Energy,quandl=>CHRIS/ICE_B1
+Cadmium,Industrial,
+Cheese,Agricultural,
+Chromium,Metals,
+Coal,Industrial,quandl=>ODA/PCOALAU_USD
+Cobalt,Industrial,
+Cocoa,Agricultural,quandl=>CHRIS/ICE_CC1
+Coffee,Agricultural,quandl=>CHRIS/ICE_KC1
+Copper,Industrial,quandl=>ODA/PCOPP_USD
+Corn,Agricultural,quandl=>CHRIS/CME_C1
+Cotton,Agricultural,quandl=>CHRIS/ICE_CT1
+Crude Oil,Energy,quandl=>CHRIS/CME_CL1
+Diamonds,Industrial,
+Eggs,Agricultural,
+Electric Power,Energy,
+Ethanol,Energy,
+Fish,Livestock,quandl=>ODA/PFISH_USD
+Flaxseed,Agricultural,
+Linseed Oil,Agricultural,
+Fruits,Agricultural,
+Gasoline,Energy,quandl=>CHRIS/CME_RB1
+Gold,Metals,quandl=>CHRIS/CME_GC1
+Grain Sorghum,Agricultural,
+Hides,Livestock,quandl=>ODA/PHIDE_USD
+Leather,Livestock,
+Honey,Agricultural,
+Iridium,Industrial,quandl=>JOHNMATT/IRID
+Iron Ore,Industrial,quandl=>ODA/PIORECR_USD
+Lard,Agricultural,quandl=>ODA/PLAMB_USD
+Lead,Industrial,quandl=>ODA/PLEAD_USD
+Lean Hogs,Livestock,quandl=>CHRIS/CME_LN1
+Live Cattle,Livestock,quandl=>ODA/PBEEF_USD
+Lithium,Industrial,
+Lumber,Agricultural,quandl=>CHRIS/CME_LB1
+Magnesium,Industrial,
+Manganese,Industrial,
+Mercury,Industrial,
+Milk,Agricultural,quandl=>CHRIS/CME_DA1
+Molybdenum,Industrial,
+Neodymium,Industrial,
+Nickel,Industrial,quandl=>ODA/PNICK_USD
+Oat,Agricultural,quandl=>CHRIS/CME_O1
+Olive Oil,Agricultural,quandl=>ODA/POLVOIL_USD
+Onions,Agricultural,
+Oranges,Agricultural,quandl=>ODA/PORANG_USD
+Orange Juice,Agricultural,quandl=>CHRIS/ICE_OJ1
+Palladium,Metals,quandl=>CHRIS/CME_PA1
+Palm Oil,Agricultural,quandl=>ODA/PPOIL_USD
+Peanuts,Agricultural,quandl=>ODA/PGNUTS_USD
+Petroleum,Energy,
+Plastics,Industrial,
+Platinum,Metals,quandl=>CHRIS/CME_PL1
+Potatoes,Agricultural,
+Poultry,Livestock,quandl=>ODA/PPOULT_USD
+Rapeseed Oil,Agricultural,quandl=>ODA/PROIL_USD
+Rhodium,Industrial,quandl=>JOHNMATT/RHOD
+Rice,Agricultural,quandl=>CHRIS/CME_RR1
+Ruthenium,Industrial,quandl=>JOHNMATT/RUTH
+Rubber,Industrial,quandl=>ODA/PRUBB_USD
+Salt,Agricultural,
+Salmon,Livestock,quandl=>ODA/PSALM_USD
+Shrimp,Livestock,quandl=>ODA/PSHRI_USD
+Silk,Agricultural,
+Silver,Metals,quandl=>CHRIS/CME_SI1
+Soybeans,Agricultural,quandl=>CHRIS/CME_S1
+Soybean Oil,Agricultural,quandl=>CHRIS/CME_BO1
+Steel,Industrial,quandl=>SHFE/RBV2013
+Sugar,Agricultural,quandl=>CHRIS/ICE_SB1
+Sulfur,Industrial,
+Tallow,Agricultural,
+Tea,Agricultural,quandl=>ODA/PTEA_USD
+Tin,Industrial,quandl=>ODA/PTIN_USD
+Titanium,Industrial,
+Tobacco,Agricultural,
+Tungsten,Industrial,
+Turkeys,Livestock,
+Uranium,Industrial,
+Vanadium,Industrial,
+Wheat,Agricultural,quandl=>CHRIS/CME_W1
+Wool,Agricultural,quandl=>ODA/PWOOLC_USD
+Zinc,Industrial,quandl=>ODA/PZINC_USD
