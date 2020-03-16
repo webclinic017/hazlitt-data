@@ -4,10 +4,11 @@ namespace App\Console\Commands\Commodities\SupplyDemand;
 
 use App\Commodity;
 use Illuminate\Support\Carbon;
-// use Unirest\Request;
-// use Unirest\Request\Header;
-// use Unirest\Request\Body;
+use Unirest\Request;
+use Unirest\Request\Header;
+use Unirest\Request\Body;
 use Illuminate\Support\Arr;
+use SimpleXMLElement;
 use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Console\Command;
 
@@ -68,32 +69,37 @@ class USGS extends Command
                 $slugAdv = 'myb1-' . $year . '-' . $cmdty . '-adv';
                 $slugs = [$slugBase, $slugAdv];
                 
-                $url = $archivedUrl;
+                $uri = $archivedUrl;
                 if ((int) $year > 2016) {
-                    $url = $recentUrl;
+                    $uri = $recentUrl;
                 }
 
                 foreach ($slugs as $slug) {
                     foreach ($extensions as $ext) {
-                        $this->comment($url . $slug . $ext);
+                        $url = $uri . $slug . $ext;
+                        $file_name = $commodity->slug . $year . $ext;
+                        $storage = '/Users/alexyounger/Sites/hazlitt-data/storage/imports/commodity/USGS/';
+                        $this->comment($url);
 
-                        $curl = curl_init();
-                        $err = curl_error($curl);
-                        curl_setopt($curl, CURLOPT_URL, $url . $slug. $ext);
-                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                        curl_setopt($curl, CURLOPT_SSLVERSION, 3);
-                        $file_data = curl_exec($curl);
-                        curl_close($curl);
-                        if ($err) {
+                        if (file_exists($storage . $file_name)) {
                             continue;
                         }
 
-                        $file_path = config('app.downloads_folder') . $year . $commodity->slug . $ext;
-                        $file = fopen($file_path, 'w+');
-                        fputs($file, $file_data);
-                        fclose($file);
+                        $response = Request::get($url);
+                        if ($response->code != 200) {
+                            continue;
+                        }
+
                         
-                        sleep(2);
+                        if ($file_name == 'myb1-2017-cadmi.xls') {
+                            continue;
+                        }                  
+
+                        if (file_put_contents($storage . $file_name, file_get_contents($url))) {
+                            $this->info("File downloaded successfully - " . $commodity->slug . $year . $ext);
+                        } else {
+                            $this->error("File downloading failed.");
+                        }
                     }
                 }
             }
