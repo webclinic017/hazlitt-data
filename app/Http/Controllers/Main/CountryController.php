@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Country;
 use App\Registry;
 use App\Article;
+use Illuminate\Support\Carbon;
 use Artesaos\SEOTools\Traits\SEOTools as SEOToolsTrait;
 
 // use Laracasts\Utilities\JavaScript\JavaScriptFacade as Javascript;
@@ -32,8 +33,10 @@ class CountryController extends Controller
                     ->orderBy('ranking', 'asc')
                     ->take(150);               
                 }
-            ])
+            ])            
             ->first();
+
+        $carbon = new Carbon();
 
         $this->seo()
             ->setTitle($entry->meta_title)
@@ -49,6 +52,27 @@ class CountryController extends Controller
 
         return view($entry->view)
             ->with('entry', $entry)
-            ->with('country', $country);
+            ->with('country', $country)
+            ->with('carbon', $carbon);
+    }
+
+    public function index()
+    {
+
+        $countries = Country::all();
+        $articles = Article::query()
+            ->where('item_type', '=', 'App\Country')
+            ->orderBy('ranking', 'asc')
+            ->take(150);
+
+            dd($articles);
+
+        $carbon = new Carbon();
+
+
+        return view($entry->view)
+            ->with('entry', $entry)
+            ->with('country', $country)
+            ->with('carbon', $carbon);
     }
 }

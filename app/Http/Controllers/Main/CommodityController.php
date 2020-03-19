@@ -37,10 +37,6 @@ class CommodityController extends Controller
             ->first();
 
         $carbon = new Carbon();
-        // $snippets = Arr::wrap($commodity->snippets->get(app()->getLocale()));
-        //     foreach ($snippets as $key => $value) {
-        //         $commodity->snippets->set(app()->getLocale() . '.' . $key, view(['template' => $value, 'secondsTemplateCacheExpires' => 0], ['entry' => $entry, 'commodity' => $commodity])->render());
-        // }
 
         $this->seo()
             ->setTitle($entry->meta_title)
@@ -57,6 +53,25 @@ class CommodityController extends Controller
         return view($entry->view)
             ->with('entry', $entry)
             ->with('commodity', $commodity)
+            ->with('carbon', $carbon);
+    }
+
+    public function index()
+    {
+        $commodities = Commodity::all();
+        $articles = Article::query()
+            ->where('item_type', '=', 'App\Commodity')
+            ->orderBy('ranking', 'asc')
+            ->take(150);
+
+            dd($articles);
+
+        $carbon = new Carbon();
+
+
+        return view($entry->view)
+            ->with('entry', $entry)
+            ->with('Commodity', $Commodity)
             ->with('carbon', $carbon);
     }
 }

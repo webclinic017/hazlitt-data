@@ -17,6 +17,11 @@ Route::get('/', function () {
     return view('dashboard');
 });
 
+Route::get('countries/index', 'CountryController@index')
+    ->name('country.index');
+Route::get('commodities/index', 'CommodityController@index')
+    ->name('commodity.index');
+
 Route::fallback('DynamicRouter@handle')
     ->name('default')
     ->middleware('minify');
