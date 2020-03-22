@@ -18,6 +18,13 @@ class IndexTableSeeder extends Seeder
         $country = Country::where('name', '=', 'United States')->first();
 
         $index = Index::create([
+            'name' => 'New York Stock Exchange',
+            'country_id' => $country->id,
+            'country_name' => $country->name,
+            'source' => 'NYSE.csv'
+        ]);
+
+        $index = Index::create([
             'name' => 'Dow Jones Industrial Average',
             'country_id' => $country->id,
             'country_name' => $country->name,
