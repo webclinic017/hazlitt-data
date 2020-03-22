@@ -15,6 +15,7 @@
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.5",
         "htmlmin/htmlmin": "^6.0",
+        "irazasyed/telegram-bot-sdk": "dev-develop",
         "laracasts/utilities": "^3.0",
         "laravel/framework": "^6.2",
         "laravel/tinker": "^2.0",
