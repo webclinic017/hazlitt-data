@@ -30,4 +30,27 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'commodity' => [
+        'spot' => env('SPOT_URL'),
+
+        'usgs' => [
+            'recent' => 'https://prd-wret.s3-us-west-2.amazonaws.com/assets/palladium/production/atoms/files/',
+            'archived' => 'https://s3-us-west-2.amazonaws.com/prd-wret/assets/palladium/production/mineral-pubs/'
+        ],
+    ],
+
+    'quandl' => [
+        'key' => env('QUANDL_API_KEY'),
+        'url' => 'https://www.quandl.com/api/v3/datasets/'
+    ],  
+    
+    'iex' => [
+        'public' => env('IEX_CLOUD_PUBLIC_KEY'),
+        'secret' => env('IEX_CLOUD_SECRET_KEY'),
+    ],  
+
+    'worldbank' => [
+        'url' => 'https://api.worldbank.org/v2/country/'
+    ]
+
 ];

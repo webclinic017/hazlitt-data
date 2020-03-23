@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,5 +14,14 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('dashboard');
 });
+
+Route::get('countries/index', 'CountryController@index')
+    ->name('country.index');
+Route::get('commodities/index', 'CommodityController@index')
+    ->name('commodity.index');
+
+Route::fallback('DynamicRouter@handle')
+    ->name('default')
+    ->middleware('minify');
