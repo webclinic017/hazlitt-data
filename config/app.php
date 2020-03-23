@@ -55,6 +55,7 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL', null),
+    'downloads_folder' => env('DOWNLOADS_PATH'),
 
     /*
     |--------------------------------------------------------------------------

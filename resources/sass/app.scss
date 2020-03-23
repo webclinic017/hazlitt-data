@@ -1,1 +1,57 @@
-//
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$gold: #f2d024;
+$dark-mode: #212121;
+$dark-mode-light: #34363a;
+$dark-mode-lighter: #303030;
+$dark-mode-lightest: #424242;
+$dark-mode-blue: #3d4852;
+
+.helvetica {
+    font-family: HelveticaNeue;
+}
+
+.aldrich {
+    font-family: "Aldrich", sans-serif;
+}
+
+.gothic-neo {
+    font-family: Apple SD Gothic Neo;
+}
+
+.alternating-row {
+    .row-item:nth-child(even) {
+        background: rgba(19, 19, 19, 0.3);
+    }
+}
+
+.shadow-inner-dark {
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.6);
+}
+
+.sidebar-icon {
+    fill: $gold;
+    color: $gold;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: black;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #dae1e7;
+    border-radius: 5px;
+}
+
+.item-news {
+    height: 80vh;
+
+    .row-item {
+        p.headline {
+            text-overflow: ellipsis;
+        }
+    }
+}
