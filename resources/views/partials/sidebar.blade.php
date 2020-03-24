@@ -12,7 +12,7 @@
         <span class="pl-2">Countries</span>
     </a>
     <a href="#" class="w-full flex py-6 pr-4 text-old-gray gothic-neo text-lg">
-        @svg('building', 'sidebar-icon w-8 h-8')
+        @svg('skyscrapers', 'sidebar-icon w-8 h-8')
         <span class="pl-2">Stocks</span>
     </a>
     <a href="#" class="w-full flex py-6 pr-4 text-old-gray gothic-neo text-lg">
