@@ -4,14 +4,14 @@ namespace App\Console\Commands\Commodities\SupplyDemand;
 
 use Illuminate\Console\Command;
 
-class SupplyDemand extends Command
+class AgSupplyDemand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'commodity:supplydemand';
+    protected $signature = 'supplydemand:agriculture';
 
     /**
      * The console command description.
