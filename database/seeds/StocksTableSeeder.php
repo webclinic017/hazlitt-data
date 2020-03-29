@@ -4,6 +4,8 @@ use Illuminate\Database\Seeder;
 use App\Index;
 use App\Stock;
 
+use SimpleExcel\SimpleExcel;
+
 class StocksTableSeeder extends Seeder
 {
     /**
@@ -16,20 +18,22 @@ class StocksTableSeeder extends Seeder
         Stock::truncate();
         $directory = 'storage/imports/stock';
         $indices = Index::all();
+        $excel = new SimpleExcel('csv');
 
         foreach ($indices as $index) {
-            $row = 1;
-            if (($handle = fopen($directory . '/' . $index->source, "r")) !== false) {
-                while (($data = fgetcsv($handle, 0, ",")) !== false) {
-                    $data = collect($data);
-                    $stock = new Stock();
-                    $stock->name = $data->last();
-                    $stock->ticker = $data->first();
-                    $stock->index_id = $index->id;                                          
-                    $stock->save();                    
-                }
-                fclose($handle);
-            }
+            $excel->parser->loadFile($directory . '/' . $index->source);
+            $rows = $excel->parser->getField();
+            foreach ($rows as $i => $row) {
+                $i = $i + 1; // Excel sheet starts at 1.
+                $ticker = $excel->parser->getCell($i, 1);
+                $name = $excel->parser->getCell($i, 2);
+
+                $stock = new Stock();
+                $stock->name = $name;
+                $stock->ticker = $ticker;
+                $stock->index_id = $index->id;
+                $stock->save();
+            }            
         }
     }
 }
