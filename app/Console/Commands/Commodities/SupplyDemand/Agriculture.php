@@ -53,32 +53,20 @@ class Agriculture extends Command
 
             $headers = $excel->parser->getRow(1);
             $rows = $excel->parser->getField();
-            // dd(count($rows));
-
-            $years = [];
-            foreach ($headers as $header) {
-                if ($header == "Variable" || "Unit") {
-                    continue;
+            $years = array_slice($headers, 2); 
+            
+            $data = [];
+            //Variables
+            foreach ($rows as $x => $row) {
+                $x = $x + 1;
+                foreach ($years as $y => $year) {
+                    $y = $y + 1;
+                    $this->info($x, $y);
+                    $cell = $excel->parser->getCell($x, $y);
+                    // $this->info($cell);
                 }
-                array_push($years, $header);
-            }
-
-            foreach ($years as $year) {
-                foreach ($rows as $i => $row) {
-                    $i = $i + 1; // Excel sheet starts at 1.
-                    $year =
-                $variable = $excel->parser->getCell($i, 1);
-                    $unit = $excel->parser->getCell($i, 2);
-                    // $ticker = $excel->parser->getCell($i, 1);
-                // $name = $excel->parser->getCell($i, 2);
-
-                // $stock = new Stock();
-                // $stock->name = $name;
-                // $stock->ticker = $ticker;
-                // $stock->index_id = $index->id;
-                // $stock->save();
-                }
-            }
+                 
+            }            
         }
     }
 }
