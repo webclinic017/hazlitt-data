@@ -32,11 +32,6 @@ return [
 
     'commodity' => [
         'spot' => env('SPOT_URL'),
-
-        'usgs' => [
-            'recent' => 'https://prd-wret.s3-us-west-2.amazonaws.com/assets/palladium/production/atoms/files/',
-            'archived' => 'https://s3-us-west-2.amazonaws.com/prd-wret/assets/palladium/production/mineral-pubs/'
-        ],
     ],
 
     'quandl' => [
