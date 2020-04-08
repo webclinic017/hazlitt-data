@@ -42,6 +42,8 @@ return [
     'iex' => [
         'public' => env('IEX_CLOUD_PUBLIC_KEY'),
         'secret' => env('IEX_CLOUD_SECRET_KEY'),
+        'sandbox_secret' => env('IEX_SANDBOX_SECRET_KEY'),
+        'sandbox_public' => env('IEX_SANDBOX_PUBLIC_KEY'),
     ],  
 
     'worldbank' => [

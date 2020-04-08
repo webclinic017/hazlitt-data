@@ -40,33 +40,61 @@ class Agriculture extends Command
      */
     public function handle()
     {
-        $commodities = Commodity::where('sector', '=', 'Agricultural')->get();
         $directory = 'storage/imports/commodity/supplydemand/agriculture';
         $excel = new SimpleExcel('csv');
-
         $files = scandir($directory);
+
+        function cleanArray($array, $years)
+        {
+            $array["Variable"] = trim($array["Variable"]);
+            $cleanedArray = $array->only('Variable', 'Unit');
+            $yearlyData = $array->splice(2);
+            $timeTable = collect($years)->combine($yearlyData);
+            $cleanedArray['years'] = $timeTable;
+
+            return $cleanedArray->toArray();
+        }
+
+
         foreach ($files as $file) {
             if ($file == "." || $file == ".." || $file == ".DS_Store") {
                 continue;
             }
-            $excel->parser->loadFile($directory . '/' . $file);
+            $fileName = explode('.', $file);
+            $commodityName = $fileName[0];
+            $commodity = Commodity::where('name', '=', $commodityName)->first();
+            if ($commodity) {
+                $excel->parser->loadFile($directory . '/' . $file);
 
-            $headers = $excel->parser->getRow(1);
-            $rows = $excel->parser->getField();
-            $years = array_slice($headers, 2); 
-            
-            $data = [];
-            //Variables
-            foreach ($rows as $x => $row) {
-                $x = $x + 1;
-                foreach ($years as $y => $year) {
-                    $y = $y + 1;
-                    $this->info($x, $y);
-                    $cell = $excel->parser->getCell($x, $y);
-                    // $this->info($cell);
+                $rows = $excel->parser->getField();
+                $headers = $excel->parser->getRow(1);
+                $years = array_slice($headers, 2);
+
+                //Values
+                foreach ($rows as $x => $row) {
+                    if ($x < 2) {
+                        continue;
+                    }
+                
+                    $fields[$x] = $excel->parser->getRow($x);
                 }
-                 
-            }            
+                //Merging arrays
+                foreach ($fields as $i => $set) {
+                    $data[$i] = collect($headers)->combine(collect($set));
+                }
+
+                //Cleaning up
+                foreach ($data as $i => $array) {
+                    $cleanData[$i] = cleanArray($array, $years);
+                }
+                // $dataJson = collect($cleanData)->toJson();                
+                //Save
+                $commodity->update([
+                    'supply_demand' => $cleanData,
+                ]);           
+                // dd($commodity);
+                // $commodity->save();                
+            }
         }
     }
 }

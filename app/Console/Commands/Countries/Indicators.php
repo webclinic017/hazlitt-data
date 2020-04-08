@@ -99,8 +99,8 @@ class Indicators extends Command
                             $indicators->each(function ($id, $indicator) use ($data, $country) {
                                 if (isset($data[$id])) {
                                     $country->update([
-                            $indicator =>  $data[$id]
-                        ]);
+                                        $indicator =>  $data[$id]
+                                    ]);
                                     $this->info("saved $country->name $indicator");
                                 }
                             });
