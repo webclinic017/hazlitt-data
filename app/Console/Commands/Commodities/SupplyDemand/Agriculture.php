@@ -14,7 +14,7 @@ class Agriculture extends Command
      *
      * @var string
      */
-    protected $signature = 'supplydemand:agriculture';
+    protected $signature = 'supplydemand:ag';
 
     /**
      * The console command description.
@@ -44,17 +44,19 @@ class Agriculture extends Command
         $excel = new SimpleExcel('csv');
         $files = scandir($directory);
 
-        function cleanArray($array, $years)
+        function formatArray($set, $years)
         {
-            $array["Variable"] = trim($array["Variable"]);
-            $cleanedArray = $array->only('Variable', 'Unit');
-            $yearlyData = $array->splice(2);
+            foreach ($set as $item) {
+                mb_convert_encoding($item, 'UTF-8', 'UTF-8');
+            }
+            $set["Variable"] = trim($set["Variable"]);
+            $formattedArray = $set->only('Variable', 'Unit');
+            $yearlyData = $set->splice(2);
             $timeTable = collect($years)->combine($yearlyData);
-            $cleanedArray['years'] = $timeTable;
+            $formattedArray['years'] = $timeTable;
 
-            return $cleanedArray->toArray();
+            return $formattedArray;
         }
-
 
         foreach ($files as $file) {
             if ($file == "." || $file == ".." || $file == ".DS_Store") {
@@ -83,17 +85,20 @@ class Agriculture extends Command
                     $data[$i] = collect($headers)->combine(collect($set));
                 }
 
-                //Cleaning up
-                foreach ($data as $i => $array) {
-                    $cleanData[$i] = cleanArray($array, $years);
+                //Formatting
+                foreach ($data as $i => $set) {
+                    $dataFormatted[$i] = formatArray($set, $years);
                 }
-                // $dataJson = collect($cleanData)->toJson();                
+
+                //Cleaning up
+                $indexedArray = collect($dataFormatted)->values();
+                $cleanedData = $indexedArray->toArray();
+
                 //Save
                 $commodity->update([
-                    'supply_demand' => $cleanData,
-                ]);           
-                // dd($commodity);
-                // $commodity->save();                
+                    'supply_demand' => $cleanedData,
+                ]);
+                $this->info('saved ' . $commodity->name);
             }
         }
     }
