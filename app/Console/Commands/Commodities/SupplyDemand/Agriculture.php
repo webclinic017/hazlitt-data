@@ -40,23 +40,24 @@ class Agriculture extends Command
      */
     public function handle()
     {
-        $directory = 'storage/imports/commodity/supplydemand/agriculture';
-        $excel = new SimpleExcel('csv');
-        $files = scandir($directory);
-
-        function formatArray($set, $years)
+        function formatArray($array, $years)
         {
-            foreach ($set as $item) {
+            foreach ($array as $item) {
                 mb_convert_encoding($item, 'UTF-8', 'UTF-8');
             }
-            $set["Variable"] = trim($set["Variable"]);
-            $formattedArray = $set->only('Variable', 'Unit');
-            $yearlyData = $set->splice(2);
+            $array["Variable"] = trim($array["Variable"]);
+            $formattedArray = $array->only('Variable', 'Unit');
+            $yearlyData = $array->splice(2);
             $timeTable = collect($years)->combine($yearlyData);
             $formattedArray['years'] = $timeTable;
 
             return $formattedArray;
         }
+
+        //Start CSV parse
+        $directory = 'storage/imports/commodity/supplydemand/agriculture';
+        $excel = new SimpleExcel('csv');
+        $files = scandir($directory);
 
         foreach ($files as $file) {
             if ($file == "." || $file == ".." || $file == ".DS_Store") {
@@ -81,12 +82,12 @@ class Agriculture extends Command
                     $fields[$x] = $excel->parser->getRow($x);
                 }
                 //Merging arrays
-                foreach ($fields as $i => $set) {
-                    $data[$i] = collect($headers)->combine(collect($set));
+                foreach ($fields as $i => $cells) {
+                    $data[$i] = collect($headers)->combine(collect($cells));
                 }
 
                 //Formatting
-                foreach ($data as $i => $set) {
+                foreach ($data as $i => $array) {
                     $dataFormatted[$i] = formatArray($set, $years);
                 }
 
