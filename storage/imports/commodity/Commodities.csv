@@ -19,7 +19,7 @@ Copper,Industrial,quandl=>ODA/PCOPP_USD
 Corn,Agricultural,quandl=>CHRIS/CME_C1
 Cotton,Agricultural,quandl=>CHRIS/ICE_CT1
 Crude Oil,Energy,quandl=>CHRIS/CME_CL1
-Diamonds,Industrial,
+Diamond,Industrial,
 Eggs,Agricultural,
 Electric Power,Energy,
 Ethanol,Energy,
