@@ -79,17 +79,13 @@ class Headlines extends Command
                             return;
                         }
                         
-                        # Manually constructing article link from jslog attribute.
-                        $jslog = $node->filter('article')->attr('jslog');
-                        $jslog_split = explode(";", $jslog);
-                        
-                        $url_stripped = explode(":", $jslog_split[1], 2);
-                        $article_url = $url_stripped[1];
+                        $href = $node->filter('article > a')->attr('href');
+                        $article_url = 'https://news.google.com/' . $href;
 
                         $duplicate = Article::where('item_id', '=', $country->id)
                             ->where('item_type', '=', 'App\Country')
                             ->where('url', '=', $article_url)
-                            ->count();                            
+                            ->count();
                         if ($duplicate != 0) {
                             $this->warn('Duplicate article');
                             return;
