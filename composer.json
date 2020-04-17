@@ -10,8 +10,10 @@
     "require": {
         "php": "^7.2",
         "artesaos/seotools": "^0.16.0",
+        "consoletvs/charts": "6.*",
         "digitonic/iex-cloud-sdk": "^0.1.0",
         "fabpot/goutte": "^4.0",
+        "faisalman/simple-excel-php": "0.3.*",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.5",
         "htmlmin/htmlmin": "^6.0",
@@ -21,8 +23,7 @@
         "laravel/tinker": "^2.0",
         "mashape/unirest-php": "^3.0",
         "nothingworks/blade-svg": "^0.3.3",
-        "spatie/async": "^1.2",
-        "faisalman/simple-excel-php": "0.3.*"
+        "spatie/async": "^1.2"
     },
     "require-dev": {
         "facade/ignition": "^1.4",
