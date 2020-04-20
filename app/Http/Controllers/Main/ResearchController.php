@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Main;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ChartGenerator;
-use App\Charts\GenerateFakeChart;
+use App\Charts\Research\GenerateFakeChart;
 
 class ResearchController extends Controller
 {

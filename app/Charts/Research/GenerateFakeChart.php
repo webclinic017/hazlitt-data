@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Charts;
+namespace App\Charts\Research;
 
 use ConsoleTVs\Charts\Classes\Chartjs\Chart;
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Commodity;
 use App\Registry;
 use App\Article;
+use App\Charts\Commodity\HistoricalPricesChart;
 use Illuminate\Support\Carbon;
 use Artesaos\SEOTools\Traits\SEOTools as SEOToolsTrait;
 
@@ -31,10 +32,26 @@ class CommodityController extends Controller
                 $query
                     ->select('articles.*')
                     ->orderBy('ranking', 'asc')
-                    ->take(150);               
+                    ->take(150);
                 }
-            ])            
+            ])
             ->first();
+
+        $historicalPrices = array_reverse($commodity->prices);
+        foreach ($historicalPrices as $i => $price) {
+            $dates[$i] = $price['Date'];
+            $prices[$i] = $price['Value'];
+        }
+
+        $chart = new HistoricalPricesChart;
+        $chart->labels($dates);
+        $chart->dataset('Historical Prices', 'line', $prices)
+            ->color('#f2d024')
+            ->fill(true, '#ffe873')
+            ->lineTension(0.4)
+            ->options([
+                'pointRadius' => 0,
+            ]);
 
         $carbon = new Carbon();
 
@@ -50,7 +67,7 @@ class CommodityController extends Controller
             ->opengraph()
             ->setUrl(url($entry->url));
 
-        return view($entry->view)
+        return view($entry->view, compact('chart'))
             ->with('entry', $entry)
             ->with('commodity', $commodity)
             ->with('carbon', $carbon);
@@ -64,7 +81,7 @@ class CommodityController extends Controller
             ->orderBy('ranking', 'asc')
             ->take(150);
 
-            dd($articles);
+        dd($articles);
 
         $carbon = new Carbon();
 
