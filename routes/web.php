@@ -17,10 +17,15 @@ Route::get('/', function () {
     return view('dashboard');
 });
 
-Route::get('countries/index', 'CountryController@index')
+Route::group(['namespace' => 'Main'], function() {
+    Route::get('countries/index', 'CountryController@index')
     ->name('country.index');
-Route::get('commodities/index', 'CommodityController@index')
+    Route::get('commodities/index', 'CommodityController@index')
     ->name('commodity.index');
+
+    Route::get('research/chart-generator', 'ResearchController@chart_generator')
+    ->name('research.chart_generator');
+});
 
 Route::fallback('DynamicRouter@handle')
     ->name('default')

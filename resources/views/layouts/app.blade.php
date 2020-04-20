@@ -10,6 +10,7 @@
     {!! SEO::generate() !!}
     <link rel="stylesheet" type="text/css" href="{!! asset('css/app.css') !!}">
     <link href="https://fonts.googleapis.com/css?family=Aldrich&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
 </head>
 
 <body class="bg-dark-mode">

@@ -45,9 +45,9 @@ class Metals extends Command
             foreach ($array as $item) {
                 mb_convert_encoding($item, 'UTF-8', 'UTF-8');
             }
-            if (empty($array['Snippet'])) {              
+            if (empty($array['Snippet'])) {
                 $formattedArray = $array->only('Variable', 'Unit');
-                $yearlyData = $array->splice(3);                
+                $yearlyData = $array->splice(3);
                 $timeTable = collect($years)->combine($yearlyData);
                 $formattedArray['years'] = $timeTable;
             } else {
@@ -73,8 +73,8 @@ class Metals extends Command
                 $excel->parser->loadFile($directory . '/' . $file);
 
                 $rows = $excel->parser->getField();
-                $headers = $excel->parser->getRow(1);                
-                $years = array_slice($headers, 3);                
+                $headers = $excel->parser->getRow(1);
+                $years = array_slice($headers, 3);
 
                 //Values
                 foreach ($rows as $x => $row) {
@@ -85,7 +85,7 @@ class Metals extends Command
                     $fields[$x] = $excel->parser->getRow($x);
                 }
                 //Merging arrays
-                foreach ($fields as $i => $cells) {                 
+                foreach ($fields as $i => $cells) {
                     $data[$i] = collect($headers)->combine(collect($cells));
                 }
 
